@@ -1,6 +1,5 @@
 package dbcon;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 
 /**
@@ -51,7 +50,7 @@ public class DBConnect {
     /**
      * Closes the connection to the rdbms
      * @see java.sql.Connection
-     * @throws SQLException
+     * @throws SQLException Closing a connection might throw an error
      * @since 1
      */
     public void close() throws SQLException {
