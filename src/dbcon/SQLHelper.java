@@ -20,7 +20,8 @@ public class SQLHelper {
     public ResultSet getQuery(String sql) throws SQLException {
         Statement newStatement = connect.createStatement();
         return newStatement.executeQuery(sql);
-
     }
+
+    //TODO add prepared statement section
 
 }

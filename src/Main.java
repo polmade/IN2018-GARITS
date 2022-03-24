@@ -1,4 +1,5 @@
 import dbcon.*;
+import inventory.Invmain;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,6 +16,7 @@ public class Main {
         while(newres.next()){
             System.out.println(newres.getInt("id") + " " + newres.getString("role"));
         }
+        Invmain newMain = new Invmain(newcon);
         db.close();
     }
 }
