@@ -5,8 +5,8 @@
 package gui;
 
 import javax.swing.JOptionPane;
-import DBcon.DBConnect;
-import DBcon.SQLHelper;
+import dbcon.DBConnect;
+import dbcon.SQLHelper;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
