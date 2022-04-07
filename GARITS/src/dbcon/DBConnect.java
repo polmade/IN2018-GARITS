@@ -12,23 +12,10 @@ import java.sql.*;
 public class DBConnect {
     static final private String DB = "jdbc:mysql://smcse-stuproj00.city.ac.uk:3306/adby464";
     static final private String User = "adby464";
-    static final private String PWord = "";
+    static final private String PWord = "180004355";
     private Connection conDB = null;
 
     public Connection open() {
-        /*
-        conDB = DriverManager.getConnection(DB, User, PWord);
-        System.out.println('1');
-        try( Statement stmt = conDB.createStatement();
-             ResultSet rs = stmt.executeQuery("Select * from Users");) {
-            while(rs.next()){
-                System.out.println(rs.getInt("id") + " " + rs.getString("role"));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-         */
         try{
             conDB = DriverManager.getConnection(DB, User, PWord);
             System.out.println("connected");
