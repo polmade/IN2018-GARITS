@@ -1,10 +1,12 @@
 import dbcon.*;
+import gui.orderForm;
+import inventory.InvOrder;
 import inventory.Invmain;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Main {
 
@@ -17,6 +19,14 @@ public class Main {
             System.out.println(newres.getInt("id") + " " + newres.getString("role"));
         }
         Invmain newMain = new Invmain(newcon);
-        db.close();
+        InvOrder newo = new InvOrder();
+
+
+        JFrame frame = new JFrame("Order");
+        frame.setContentPane(new orderForm(newcon).formView);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+        //db.close();
     }
 }

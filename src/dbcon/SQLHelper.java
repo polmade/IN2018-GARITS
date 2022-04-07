@@ -17,11 +17,20 @@ public class SQLHelper {
         this.connect = connect;
     }
 
+    public SQLHelper(){}
+
+    public void addConnection(Connection connect) { this.connect = connect;}
+
     public ResultSet getQuery(String sql) throws SQLException {
         Statement newStatement = connect.createStatement();
         return newStatement.executeQuery(sql);
     }
 
-    //TODO add prepared statement section
+    public void updateDB(String sql) throws SQLException {
+        Statement newStatement = connect.createStatement();
+        newStatement.executeUpdate(sql);
+    }
+
+
 
 }
