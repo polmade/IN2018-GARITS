@@ -22,5 +22,10 @@ public class SQLHelper {
         return newStatement.executeQuery(sql);
 
     }
+    
+    public void addToTable(String sql) throws SQLException {
+        PreparedStatement ps = connect.prepareStatement(sql);
+        ps.executeUpdate();
+    }
 
 }

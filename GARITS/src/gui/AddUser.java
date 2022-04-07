@@ -4,6 +4,12 @@
  */
 package gui;
 
+import dbcon.DBConnect;
+import dbcon.SQLHelper;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 /**
  *
  * @author hnaro
@@ -12,6 +18,8 @@ public class AddUser extends javax.swing.JFrame {
     
     private String username;
     private String role;
+    SQLHelper sqlhelper;
+    DBConnect conn;
     /**
      * Creates new form AddUser
      */
@@ -22,6 +30,13 @@ public class AddUser extends javax.swing.JFrame {
         initComponents();
         setTitle("Add User | GARITS");
         setVisible(true);
+        
+        conn = new DBConnect();
+        if (conn == null) {
+            JOptionPane.showMessageDialog(this, "DB connection failed.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            sqlhelper = new SQLHelper(conn.open());
+        }
      
     }
 
@@ -62,6 +77,7 @@ public class AddUser extends javax.swing.JFrame {
         lblpassword.setText("Password: ");
 
         cbrole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrator", "Franchisee", "Foreperson", "Mechanic", "Receptionist" }));
+        cbrole.setSelectedIndex(-1);
         cbrole.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbroleActionPerformed(evt);
@@ -162,11 +178,16 @@ public class AddUser extends javax.swing.JFrame {
 
     private void btbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbackActionPerformed
         dispose();
+        try {
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
         new MainMenu(username, role);
     }//GEN-LAST:event_btbackActionPerformed
 
     private void cbroleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbroleActionPerformed
-        if(cbrole.getSelectedItem().toString() == "Mechanic") {
+        if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")) {
             tfhourlyrate.setEnabled(true);
         } else {
             tfhourlyrate.setEnabled(false);
@@ -175,10 +196,59 @@ public class AddUser extends javax.swing.JFrame {
     }//GEN-LAST:event_cbroleActionPerformed
 
     private void btcreatenewuserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btcreatenewuserActionPerformed
-        // TODO add your handling code here:
+        boolean flag = true;
+        // check for empty fields
+        if (tfname.getText().isEmpty() || tfusername.getText().isEmpty() || tfpassword.getText().isEmpty()
+                || cbrole.getSelectedIndex() == -1) {
+            flag = false;
+        }
+        // check if hourly rate text field is enabled and empty
+        else if (tfhourlyrate.isEnabled() && tfhourlyrate.getText().isEmpty()) {
+            flag = false;
+        } else {
+            // create new user
+            try {
+                String sql = ("insert into user (name, role, username, password)" 
+                        + "values("
+                        + "'" + tfname.getText() + "',"
+                        + "'" + cbrole.getSelectedItem().toString() + "',"
+                        + "'" + tfusername.getText() + "',"
+                        + "'" + tfpassword.getText() + "')");
+                sqlhelper.addToTable(sql);
+            } catch(Exception e) {
+                System.err.println(e.getMessage());
+            }
+            
+            // if user == "mechanic"
+            if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")) {
+                try {
+                    String sql = ("insert into mechanic (username, hourly_rate)" 
+                            + "values("
+                            + "'" + tfusername.getText() + "',"
+                            + "'" + tfhourlyrate.getText() + "')");
+                    sqlhelper.addToTable(sql);
+                } catch(Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+            clearAllFields();
+        }
+        
+        if (!flag) {
+            JOptionPane.showMessageDialog(this, "Please fill in all the boxes", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "New user created");
+        }
     }//GEN-LAST:event_btcreatenewuserActionPerformed
-
-
+    
+    // set all field to null
+    private void clearAllFields() {
+        tfname.setText(null);
+        cbrole.setSelectedItem(null);
+        tfusername.setText(null);
+        tfpassword.setText(null);
+        tfhourlyrate.setText(null);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btback;
     private javax.swing.JButton btcreatenewuser;

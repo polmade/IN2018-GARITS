@@ -28,7 +28,7 @@ public class MainMenu extends javax.swing.JFrame {
         setTitle("Mainmenu | GARITS");
         setVisible(true);
         // if the user is admin, admin menu set to enable and other to disable
-        if (role.equalsIgnoreCase("Administor")) {
+        if (role.equalsIgnoreCase("Administrator")) {
             btadminmenu.setEnabled(true);
             btpartsmenu.setEnabled(false);
             btjobsmenu.setEnabled(false);

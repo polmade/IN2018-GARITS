@@ -34,6 +34,7 @@ public class DBConnect {
      */
     public void close() throws SQLException {
         conDB.close();
+        System.out.println("disconnected");
     }
 
 }
