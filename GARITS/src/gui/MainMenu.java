@@ -7,6 +7,7 @@ package gui;
 import java.awt.CardLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
+import user_accounts.User;
 
 /**
  *
@@ -14,41 +15,36 @@ import javax.swing.ListSelectionModel;
  */
 public class MainMenu extends javax.swing.JFrame {
     
-    private String username;
-    private String role;
     DefaultListModel listmodel = new DefaultListModel();
+    User user;
     /**
      * Creates new form mainmenu
      */
-    public MainMenu(String username, String role) {
-        this.username = username;
-        this.role = role;
-        
+    public MainMenu(User user) {
+        this.user = user;
         initComponents();
         setTitle("Mainmenu | GARITS");
         setVisible(true);
         // if the user is admin, admin menu set to enable and other to disable
-        if (role.equalsIgnoreCase("Administrator")) {
+        if (user.getRole().equalsIgnoreCase("Administrator")) {
             btadminmenu.setEnabled(true);
             btpartsmenu.setEnabled(false);
             btjobsmenu.setEnabled(false);
             btcustomermenu.setEnabled(false);
         }
-        poplutate();
+        poplutate(user);
     }
     
-    private void poplutate() {
-        this.lbluserid.setText(username);
+    private void poplutate(User user) {
+        this.lbluserid.setText(user.getUsername());
         
         // making the menu list to single selection
         jListadmin.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         // admin menu options
         listmodel.addElement("Add User");
-        listmodel.addElement("Delete User");
-        listmodel.addElement("Edit User");
-        listmodel.addElement("Backup Database");
-        listmodel.addElement("Restore Database");
+        listmodel.addElement("Edit/Delete User");
+        listmodel.addElement("Backup/Restore Database");
         jListadmin.setModel(listmodel);
     }
 
@@ -297,7 +293,11 @@ public class MainMenu extends javax.swing.JFrame {
         String selectedItem = jListadmin.getSelectedValue();
         if(selectedItem == "Add User") {
             dispose();
-            new AddUser(username, role);
+            new AddUser(user);
+        }
+        if (selectedItem == "Edit/Delete User") {
+            dispose();
+            new EditDeleteUser(user);
         }
     }//GEN-LAST:event_btviewActionPerformed
 

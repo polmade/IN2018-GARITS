@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import user_accounts.User;
 
 /**
  *
@@ -22,7 +23,7 @@ public class Login extends javax.swing.JFrame {
     
     DBConnect conn;
     SQLHelper sqlhelper;
-    
+    User u = new User();
     /**
      * Creates new form login
      */
@@ -164,19 +165,23 @@ public class Login extends javax.swing.JFrame {
             boolean flag = false;
             try {
                 // start Login process.
-                ResultSet rs = sqlhelper.getQuery("Select username, password, role from user");
+                ResultSet rs = sqlhelper.getQuery("Select * from user");
                 while (rs.next()) {
                     String user = rs.getString("username");
                     String pass = rs.getString("password");
                     String role = rs.getString("role");
                     // verify username and password match.
                     if ((username.equals(user)) && (password.equals(pass))) {
+                        u.setUsername(user);
+                        u.setRole(role);
+                        u.setName(rs.getString("name"));
+                        u.setPassword(pass);
                         flag = true;
                         dispose();
                         conn.close();
                         // Login successfull
                         // next window display here after Login
-                        new MainMenu(username, role);
+                        new MainMenu(u);
                         break;
                     }
                 }

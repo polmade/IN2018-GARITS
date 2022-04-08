@@ -23,7 +23,7 @@ public class SQLHelper {
 
     }
     
-    public void addToTable(String sql) throws SQLException {
+    public void updateTable(String sql) throws SQLException {
         PreparedStatement ps = connect.prepareStatement(sql);
         ps.executeUpdate();
     }

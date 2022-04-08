@@ -10,23 +10,21 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import user_accounts.User;
 /**
  *
  * @author hnaro
  */
 public class AddUser extends javax.swing.JFrame {
     
-    private String username;
-    private String role;
     SQLHelper sqlhelper;
     DBConnect conn;
+    User user;
     /**
      * Creates new form AddUser
      */
-    public AddUser(String username, String role) {
-        this.username = username;
-        this.role = role;
-        
+    public AddUser(User user) {
+        this.user = user;
         initComponents();
         setTitle("Add User | GARITS");
         setVisible(true);
@@ -77,7 +75,6 @@ public class AddUser extends javax.swing.JFrame {
         lblpassword.setText("Password: ");
 
         cbrole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrator", "Franchisee", "Foreperson", "Mechanic", "Receptionist" }));
-        cbrole.setSelectedIndex(-1);
         cbrole.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbroleActionPerformed(evt);
@@ -87,6 +84,11 @@ public class AddUser extends javax.swing.JFrame {
         lblhourlyrate.setText("Hourly Rate: ");
 
         tfhourlyrate.setEnabled(false);
+        tfhourlyrate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfhourlyrateKeyTyped(evt);
+            }
+        });
 
         btcreatenewuser.setText("Create New User");
         btcreatenewuser.addActionListener(new java.awt.event.ActionListener() {
@@ -108,7 +110,7 @@ public class AddUser extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(btback)
-                .addGap(99, 99, 99)
+                .addGap(92, 92, 92)
                 .addComponent(lblpagetitle)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -170,7 +172,7 @@ public class AddUser extends javax.swing.JFrame {
                         .addComponent(tfhourlyrate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btcreatenewuser)
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
 
         pack();
@@ -183,7 +185,7 @@ public class AddUser extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
         }
-        new MainMenu(username, role);
+        new MainMenu(user);
     }//GEN-LAST:event_btbackActionPerformed
 
     private void cbroleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbroleActionPerformed
@@ -214,8 +216,8 @@ public class AddUser extends javax.swing.JFrame {
                         + "'" + cbrole.getSelectedItem().toString() + "',"
                         + "'" + tfusername.getText() + "',"
                         + "'" + tfpassword.getText() + "')");
-                sqlhelper.addToTable(sql);
-            } catch(Exception e) {
+                sqlhelper.updateTable(sql);
+            } catch(SQLException e) {
                 System.err.println(e.getMessage());
             }
             
@@ -226,8 +228,8 @@ public class AddUser extends javax.swing.JFrame {
                             + "values("
                             + "'" + tfusername.getText() + "',"
                             + "'" + tfhourlyrate.getText() + "')");
-                    sqlhelper.addToTable(sql);
-                } catch(Exception e) {
+                    sqlhelper.updateTable(sql);
+                } catch(SQLException e) {
                     System.err.println(e.getMessage());
                 }
             }
@@ -240,6 +242,19 @@ public class AddUser extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "New user created");
         }
     }//GEN-LAST:event_btcreatenewuserActionPerformed
+
+    private void tfhourlyrateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfhourlyrateKeyTyped
+        // restric user from entering any other character except Double
+        if (Character.isLetter(evt.getKeyChar())) {
+            evt.consume();
+        } else {
+            try {
+                Double.parseDouble(tfhourlyrate.getText()+evt.getKeyChar());
+            } catch (NumberFormatException e) {
+                evt.consume();
+            }
+        }
+    }//GEN-LAST:event_tfhourlyrateKeyTyped
     
     // set all field to null
     private void clearAllFields() {
