@@ -1,11 +1,14 @@
 import java.sql.SQLException;
 
-public class main {
-
+public class Main {
     public static void main(String[] args) throws SQLException {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new gui.login().setVisible(true);
+                try {
+                    new gui.login().setVisible(true);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
