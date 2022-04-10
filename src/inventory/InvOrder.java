@@ -57,7 +57,6 @@ public class InvOrder{
      * @see Invmain
      */
     public void generatePartsToOrder(){
-        //TODO change the db associated with orders
         for(String k : partsUsed.keySet()){
             int noToOrder = Invmain.spareParts.get(k) - partsUsed.get(k);
             if(noToOrder < 0){

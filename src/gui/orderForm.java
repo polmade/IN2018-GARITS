@@ -7,9 +7,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import dbcon.SQLHelper;
 import inventory.*;
+import java.math.*;
+import java.util.Random;
+
+
 
 public class orderForm {
     public JPanel formView;
@@ -20,14 +25,17 @@ public class orderForm {
     private JButton button3;
     private JButton button4;
     private JButton button5;
-
+    SQLHelper formHelp = new SQLHelper();
+    int randOrderNo;
+    static Random rand = new Random();
 
     public orderForm(Connection con) {
-        try {
+        /*try {
             con.setAutoCommit(false);
         } catch (SQLException e) {
             e.printStackTrace();
-        }
+        }*/
+        formHelp.addConnection(con);
         Invmain newmain = new Invmain(con);
         InvOrder newOrder = new InvOrder();
         newOrder.generatePartsToOrder();
@@ -49,34 +57,28 @@ public class orderForm {
         button4.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //super.mouseClicked(e);
+                int newRand = rand.nextInt();
+                //super.mouseClicked(e);extInt()
                 try {
-                    //con.setAutoCommit(false);
-                    //String sqlCreateOrder = "INSERT INTO Orders VALUES (order_no = ?, date = ?, ReceptionistUsersid = ?)";
-                    /*
+                    con.setAutoCommit(false);
+                    String sqlCreateOrder = "INSERT INTO Orders VALUES (?, ?);";
+                    String sqlPurchaseOrder = "INSERT INTO Purchase_Order VALUES (?, ?, ?);";
                     PreparedStatement createOrder = con.prepareStatement(sqlCreateOrder);
-                    createOrder.setString(1, String.valueOf(1));
-                    createOrder.setString(2, "5/4/2022");
-                    createOrder.setString(3, String.valueOf(2));
-                    System.out.println(createOrder);
-                    createOrder.executeUpdate();
+                    createOrder.setInt(1, newRand);
+                    createOrder.setInt(2, 542022);
+                    int rs = createOrder.executeUpdate();
+                    PreparedStatement purchaseOrder = con.prepareStatement(sqlPurchaseOrder);
+                    int listSize = listModel.size();
+                    for(int i = 0; i < listSize; i++){
+                        purchaseOrder.setInt(1, newRand);
+                        purchaseOrder.setString(2, listModel.get(i).toString());
+                        purchaseOrder.setInt(3, newOrder.getPartsToOrder().get(listModel.get(i).toString()));
+                        int com = purchaseOrder.executeUpdate();
+                    }
+                    con.commit();
 
-                     */
-                    String sqlCreateOrder = "INSERT INTO Orders VALUES (order_no = " + String.valueOf(1)  +  ", date = " + 542022 + ", ReceptionistUsersid = " + 2 + ")";
-                    //con.commit();
-                    //con.setAutoCommit(true);
-                    newOrder.updateDB(sqlCreateOrder);
-                    System.out.println("Committed");
-                            /*
-                            String sqlUpdate = "INSERT INTO Purchase_Order VALUES Ordersorder_no = ?, SparePartspart_code = ? , noToOrder = ?";
-                    PreparedStatement sqlUpdateStatement = con.prepareStatement(sqlUpdate);
-                    sqlUpdateStatement.setString(1, String.valueOf(1));
-                    sqlUpdateStatement.setString(2, String.valueOf(list1.getSelectedValue()));
-                    sqlUpdateStatement.setString(3, textField1.getText());
-
-                             */
                 } catch(SQLException ex){
-
+                    System.out.println(ex.getErrorCode());
                 }
 
             }
@@ -98,6 +100,20 @@ public class orderForm {
                 }
             }
         });
+        refetchButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                try {
+                    newOrder.updateUsedPartsMap();
+                    newOrder.generatePartsToOrder();
+                    updateListModel(listModel, newOrder);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
+            }
+        });
     }
 
     private void updateListModel(DefaultListModel listModel, InvOrder order){
@@ -108,6 +124,8 @@ public class orderForm {
         }
 
     }
+
+
 
     private void createGUIComponents(){}
 }

@@ -10,8 +10,8 @@ import java.sql.*;
  */
 
 public class DBConnect {
-    static final private String DB = "jdbc:mysql://smcse-stuproj00.city.ac.uk:3306/adbs997";
-    static final private String User = "adbs997";
+    static final private String DB = "jdbc:mariadb://localhost/GARITS";
+    static final private String User = "";
     static final private String PWord = "";
     private Connection conDB = null;
 
