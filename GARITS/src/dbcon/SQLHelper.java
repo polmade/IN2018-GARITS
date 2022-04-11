@@ -36,6 +36,11 @@ public class SQLHelper {
         connect.commit();
         System.out.println("In commit");
     }
+    
+    public void updateTable(String sql) throws SQLException {
+        PreparedStatement ps = connect.prepareStatement(sql);
+        ps.executeUpdate();
+    }
 
 
 

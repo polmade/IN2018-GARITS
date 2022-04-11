@@ -4,6 +4,7 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="title" type="java.lang.String" value="Login | GARITS"/>
+    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -51,8 +52,8 @@
                           </Group>
                           <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="tfuser" max="32767" attributes="0"/>
-                              <Component id="tfpass" min="-2" pref="222" max="-2" attributes="0"/>
+                              <Component id="tfuser" pref="222" max="32767" attributes="0"/>
+                              <Component id="pfpass" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -70,9 +71,9 @@
                       <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="tfpass" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                      <Component id="pfpass" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btlogin" min="-2" max="-2" attributes="0"/>
@@ -84,11 +85,14 @@
       <SubComponents>
         <Component class="javax.swing.JTextField" name="tfuser">
         </Component>
-        <Component class="javax.swing.JTextField" name="tfpass">
-        </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Username: "/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JPasswordField" name="pfpass">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="jPasswordField1"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
@@ -126,7 +130,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Admin Login"/>
+                <Property name="text" type="java.lang.String" value="Login"/>
               </Properties>
               <AccessibilityProperties>
                 <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value=""/>
