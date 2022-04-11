@@ -20,8 +20,10 @@ public class AddUser extends javax.swing.JFrame {
     SQLHelper sqlhelper;
     DBConnect conn;
     User user;
-    /**
-     * Creates new form AddUser
+    
+    /*
+     * Creates new AddUser form/page.
+     * @param user
      */
     public AddUser(User user) {
         this.user = user;
@@ -256,7 +258,10 @@ public class AddUser extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tfhourlyrateKeyTyped
     
-    // set all field to null
+    /*
+     * Clears all fields
+     * @param 
+     */
     private void clearAllFields() {
         tfname.setText(null);
         cbrole.setSelectedItem(null);

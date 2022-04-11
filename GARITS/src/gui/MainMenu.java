@@ -17,9 +17,11 @@ public class MainMenu extends javax.swing.JFrame {
     
     DefaultListModel listmodel = new DefaultListModel();
     User user;
+    
     /**
-     * Creates new form mainmenu
-     */
+     * Creates new MainMenu form/page.
+     * @param 
+    */
     public MainMenu(User user) {
         this.user = user;
         initComponents();
@@ -32,10 +34,14 @@ public class MainMenu extends javax.swing.JFrame {
             btjobsmenu.setEnabled(false);
             btcustomermenu.setEnabled(false);
         }
-        poplutate(user);
+        populate(user);
     }
     
-    private void poplutate(User user) {
+    /**
+     * populate MainMenu form
+     * @param user
+     */
+    private void populate(User user) {
         this.lbluserid.setText(user.getUsername());
         
         // making the menu list to single selection
@@ -58,15 +64,16 @@ public class MainMenu extends javax.swing.JFrame {
     private void initComponents() {
 
         mainPanel = new javax.swing.JPanel();
+        emptyPanel = new javax.swing.JPanel();
+        adminPanel = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListadmin = new javax.swing.JList<>();
+        partsPanel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
         jobsPanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         customersPanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        partsPanel = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        adminPanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jListadmin = new javax.swing.JList<>();
         btpartsmenu = new javax.swing.JButton();
         btjobsmenu = new javax.swing.JButton();
         btcustomermenu = new javax.swing.JButton();
@@ -83,6 +90,66 @@ public class MainMenu extends javax.swing.JFrame {
         mainPanel.setBackground(new java.awt.Color(204, 204, 204));
         mainPanel.setPreferredSize(new java.awt.Dimension(0, 370));
         mainPanel.setLayout(new java.awt.CardLayout());
+
+        javax.swing.GroupLayout emptyPanelLayout = new javax.swing.GroupLayout(emptyPanel);
+        emptyPanel.setLayout(emptyPanelLayout);
+        emptyPanelLayout.setHorizontalGroup(
+            emptyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 815, Short.MAX_VALUE)
+        );
+        emptyPanelLayout.setVerticalGroup(
+            emptyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 370, Short.MAX_VALUE)
+        );
+
+        mainPanel.add(emptyPanel, "card6");
+
+        adminPanel.setBackground(new java.awt.Color(153, 153, 153));
+
+        jListadmin.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jListadmin);
+
+        javax.swing.GroupLayout adminPanelLayout = new javax.swing.GroupLayout(adminPanel);
+        adminPanel.setLayout(adminPanelLayout);
+        adminPanelLayout.setHorizontalGroup(
+            adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 815, Short.MAX_VALUE)
+        );
+        adminPanelLayout.setVerticalGroup(
+            adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+        );
+
+        mainPanel.add(adminPanel, "adminPanel");
+        adminPanel.getAccessibleContext().setAccessibleName("");
+
+        partsPanel.setBackground(new java.awt.Color(153, 153, 153));
+        partsPanel.setPreferredSize(new java.awt.Dimension(942, 100));
+
+        jLabel2.setText("parts");
+
+        javax.swing.GroupLayout partsPanelLayout = new javax.swing.GroupLayout(partsPanel);
+        partsPanel.setLayout(partsPanelLayout);
+        partsPanelLayout.setHorizontalGroup(
+            partsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(partsPanelLayout.createSequentialGroup()
+                .addGap(0, 395, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(0, 394, Short.MAX_VALUE))
+        );
+        partsPanelLayout.setVerticalGroup(
+            partsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(partsPanelLayout.createSequentialGroup()
+                .addGap(0, 177, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(0, 177, Short.MAX_VALUE))
+        );
+
+        mainPanel.add(partsPanel, "partsPanel");
 
         jobsPanel.setBackground(new java.awt.Color(153, 153, 153));
         jobsPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -140,53 +207,6 @@ public class MainMenu extends javax.swing.JFrame {
         );
 
         mainPanel.add(customersPanel, "customersPanel");
-
-        partsPanel.setBackground(new java.awt.Color(153, 153, 153));
-        partsPanel.setPreferredSize(new java.awt.Dimension(942, 100));
-
-        jLabel2.setText("parts");
-
-        javax.swing.GroupLayout partsPanelLayout = new javax.swing.GroupLayout(partsPanel);
-        partsPanel.setLayout(partsPanelLayout);
-        partsPanelLayout.setHorizontalGroup(
-            partsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(partsPanelLayout.createSequentialGroup()
-                .addGap(0, 395, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(0, 394, Short.MAX_VALUE))
-        );
-        partsPanelLayout.setVerticalGroup(
-            partsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(partsPanelLayout.createSequentialGroup()
-                .addGap(0, 177, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(0, 177, Short.MAX_VALUE))
-        );
-
-        mainPanel.add(partsPanel, "partsPanel");
-
-        adminPanel.setBackground(new java.awt.Color(153, 153, 153));
-
-        jListadmin.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jListadmin);
-
-        javax.swing.GroupLayout adminPanelLayout = new javax.swing.GroupLayout(adminPanel);
-        adminPanel.setLayout(adminPanelLayout);
-        adminPanelLayout.setHorizontalGroup(
-            adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 815, Short.MAX_VALUE)
-        );
-        adminPanelLayout.setVerticalGroup(
-            adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
-        );
-
-        mainPanel.add(adminPanel, "adminPanel");
-        adminPanel.getAccessibleContext().setAccessibleName("");
 
         btpartsmenu.setText("Parts Menu");
         btpartsmenu.addActionListener(new java.awt.event.ActionListener() {
@@ -299,6 +319,10 @@ public class MainMenu extends javax.swing.JFrame {
             dispose();
             new EditDeleteUser(user);
         }
+        if (selectedItem == "Backup/Restore Database") {
+            dispose();
+            new BackupRestoreDB(user);
+        }
     }//GEN-LAST:event_btviewActionPerformed
 
     private void btlogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlogoutActionPerformed
@@ -319,6 +343,7 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JButton btpartsmenu;
     private javax.swing.JButton btview;
     private javax.swing.JPanel customersPanel;
+    private javax.swing.JPanel emptyPanel;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

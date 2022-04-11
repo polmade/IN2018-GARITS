@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import user_accounts.User;
 
 /**
- *
+ * Login GUI class
  * @author hnaro
  */
 public class Login extends javax.swing.JFrame {
@@ -24,8 +24,9 @@ public class Login extends javax.swing.JFrame {
     DBConnect conn;
     SQLHelper sqlhelper;
     User u = new User();
+   
     /**
-     * Creates new form login
+     * Creates new login page
      */
     public Login() {
         initComponents();
@@ -65,11 +66,6 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setText("Username: ");
 
         pfpass.setText("jPasswordField1");
-        pfpass.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pfpassActionPerformed(evt);
-            }
-        });
 
         jLabel3.setText("Password: ");
 
@@ -152,7 +148,7 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void btloginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btloginActionPerformed
         String username = tfuser.getText();
         char[] cpassword = pfpass.getPassword();
@@ -171,7 +167,7 @@ public class Login extends javax.swing.JFrame {
                     String pass = rs.getString("password");
                     String role = rs.getString("role");
                     // verify username and password match.
-                    if ((username.equals(user)) && (password.equals(pass))) {
+                    if ((username.equalsIgnoreCase(user)) && (password.equals(pass))) {
                         u.setUsername(user);
                         u.setRole(role);
                         u.setName(rs.getString("name"));
@@ -193,10 +189,6 @@ public class Login extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btloginActionPerformed
-
-    private void pfpassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pfpassActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pfpassActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btlogin;
