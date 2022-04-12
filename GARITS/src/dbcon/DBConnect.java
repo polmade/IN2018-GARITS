@@ -11,8 +11,8 @@ import java.sql.*;
 
 public class DBConnect {
     static final private String DB = "jdbc:mariadb://localhost/GARITS";
-    static final private String User = "";
-    static final private String PWord = "";
+    static final private String User = "dytu";
+    static final private String PWord = "dytu";
     private Connection conDB = null;
 
 

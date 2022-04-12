@@ -7,6 +7,9 @@ package gui;
 import java.awt.CardLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
+import java.sql.*;
+
+import dbcon.DBConnect;
 import user_accounts.User;
 
 /**
@@ -14,7 +17,8 @@ import user_accounts.User;
  * @author hnaro
  */
 public class MainMenu extends javax.swing.JFrame {
-    
+
+    DBConnect conn;
     DefaultListModel listmodel = new DefaultListModel();
     User user;
     
@@ -34,14 +38,14 @@ public class MainMenu extends javax.swing.JFrame {
             btjobsmenu.setEnabled(false);
             btcustomermenu.setEnabled(false);
         }
-        populate(user);
+        populateAdmin(user);
     }
     
     /**
      * populate MainMenu form
      * @param user
      */
-    private void populate(User user) {
+    private void populateAdmin(User user) {
         this.lbluserid.setText(user.getUsername());
         
         // making the menu list to single selection
@@ -52,6 +56,16 @@ public class MainMenu extends javax.swing.JFrame {
         listmodel.addElement("Edit/Delete User");
         listmodel.addElement("Backup/Restore Database");
         jListadmin.setModel(listmodel);
+    }
+
+    private void populateParts(User user){
+        this.lbluserid.setText(user.getUsername());
+        jListadmin.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        partsListModel.clear();
+        partsListModel.addElement("View Orders");
+        partsListModel.addElement("Create Order");
+        jListadmin.setModel(partsListModel);
+        partsPanel.add(jListadmin);
     }
 
     /**
@@ -297,6 +311,9 @@ public class MainMenu extends javax.swing.JFrame {
     private void btpartsmenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btpartsmenuActionPerformed
         CardLayout card = (CardLayout)mainPanel.getLayout();
         card.show(mainPanel, "partsPanel");
+        populateParts(user);
+        //card.show(partsPanel, "partsPanel");
+        //card.show(jListadmin, "Parts");
     }//GEN-LAST:event_btpartsmenuActionPerformed
 
     private void btjobsmenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btjobsmenuActionPerformed
@@ -310,19 +327,33 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_btcustomermenuActionPerformed
 
     private void btviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btviewActionPerformed
+        String activePanel = mainPanel.getName();
         String selectedItem = jListadmin.getSelectedValue();
-        if(selectedItem == "Add User") {
-            dispose();
-            new AddUser(user);
+        try{
+            switch(activePanel){
+                case "partsPanel":
+                    switch (selectedItem){
+                        case "View Orders":
+                            dispose();
+                            //new viewOrders( conn = new DBConnect());
+                    }
+            }
+            if(selectedItem == "Add User") {
+                dispose();
+                new AddUser(user);
+            }
+            if (selectedItem == "Edit/Delete User") {
+                dispose();
+                new EditDeleteUser(user);
+            }
+            if (selectedItem == "Backup/Restore Database") {
+                dispose();
+                new BackupRestoreDB(user);
+            }
+        } catch (SQLException ex){
+            ex.printStackTrace();
         }
-        if (selectedItem == "Edit/Delete User") {
-            dispose();
-            new EditDeleteUser(user);
-        }
-        if (selectedItem == "Backup/Restore Database") {
-            dispose();
-            new BackupRestoreDB(user);
-        }
+
     }//GEN-LAST:event_btviewActionPerformed
 
     private void btlogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlogoutActionPerformed
@@ -333,7 +364,10 @@ public class MainMenu extends javax.swing.JFrame {
         CardLayout card = (CardLayout)mainPanel.getLayout();
         card.show(mainPanel, "adminPanel");
     }//GEN-LAST:event_btadminmenuActionPerformed
- 
+
+
+    private DefaultListModel<String> partsListModel = new DefaultListModel<>();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel adminPanel;
     private javax.swing.JButton btadminmenu;

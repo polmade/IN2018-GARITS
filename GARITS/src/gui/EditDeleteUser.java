@@ -32,7 +32,7 @@ public class EditDeleteUser extends javax.swing.JFrame {
      * Creates new Edit/Delete User form/page.
      * @param user
      */
-    public EditDeleteUser(User user) {
+    public EditDeleteUser(User user) throws SQLException{
         this.user = user;
         usersListModel = new DefaultListModel();
         initComponents();
