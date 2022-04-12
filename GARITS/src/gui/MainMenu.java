@@ -20,7 +20,7 @@ public class MainMenu extends javax.swing.JFrame {
     
     /**
      * Creates new MainMenu form/page.
-     * @param 
+     * @param user
     */
     public MainMenu(User user) {
         this.user = user;
@@ -45,13 +45,7 @@ public class MainMenu extends javax.swing.JFrame {
         this.lbluserid.setText(user.getUsername());
         
         // making the menu list to single selection
-        jListadmin.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
-        // admin menu options
-        listmodel.addElement("Add User");
-        listmodel.addElement("Edit/Delete User");
-        listmodel.addElement("Backup/Restore Database");
-        jListadmin.setModel(listmodel);
+        jListItem.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     /**
@@ -64,16 +58,7 @@ public class MainMenu extends javax.swing.JFrame {
     private void initComponents() {
 
         mainPanel = new javax.swing.JPanel();
-        emptyPanel = new javax.swing.JPanel();
-        adminPanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jListadmin = new javax.swing.JList<>();
-        partsPanel = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jobsPanel = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        customersPanel = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        jListItem = new javax.swing.JList<>();
         btpartsmenu = new javax.swing.JButton();
         btjobsmenu = new javax.swing.JButton();
         btcustomermenu = new javax.swing.JButton();
@@ -89,124 +74,19 @@ public class MainMenu extends javax.swing.JFrame {
 
         mainPanel.setBackground(new java.awt.Color(204, 204, 204));
         mainPanel.setPreferredSize(new java.awt.Dimension(0, 370));
-        mainPanel.setLayout(new java.awt.CardLayout());
 
-        javax.swing.GroupLayout emptyPanelLayout = new javax.swing.GroupLayout(emptyPanel);
-        emptyPanel.setLayout(emptyPanelLayout);
-        emptyPanelLayout.setHorizontalGroup(
-            emptyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 815, Short.MAX_VALUE)
+        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jListItem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        emptyPanelLayout.setVerticalGroup(
-            emptyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 370, Short.MAX_VALUE)
+        mainPanelLayout.setVerticalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addComponent(jListItem, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
-
-        mainPanel.add(emptyPanel, "card6");
-
-        adminPanel.setBackground(new java.awt.Color(153, 153, 153));
-
-        jListadmin.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jListadmin);
-
-        javax.swing.GroupLayout adminPanelLayout = new javax.swing.GroupLayout(adminPanel);
-        adminPanel.setLayout(adminPanelLayout);
-        adminPanelLayout.setHorizontalGroup(
-            adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 815, Short.MAX_VALUE)
-        );
-        adminPanelLayout.setVerticalGroup(
-            adminPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
-        );
-
-        mainPanel.add(adminPanel, "adminPanel");
-        adminPanel.getAccessibleContext().setAccessibleName("");
-
-        partsPanel.setBackground(new java.awt.Color(153, 153, 153));
-        partsPanel.setPreferredSize(new java.awt.Dimension(942, 100));
-
-        jLabel2.setText("parts");
-
-        javax.swing.GroupLayout partsPanelLayout = new javax.swing.GroupLayout(partsPanel);
-        partsPanel.setLayout(partsPanelLayout);
-        partsPanelLayout.setHorizontalGroup(
-            partsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(partsPanelLayout.createSequentialGroup()
-                .addGap(0, 395, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(0, 394, Short.MAX_VALUE))
-        );
-        partsPanelLayout.setVerticalGroup(
-            partsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(partsPanelLayout.createSequentialGroup()
-                .addGap(0, 177, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(0, 177, Short.MAX_VALUE))
-        );
-
-        mainPanel.add(partsPanel, "partsPanel");
-
-        jobsPanel.setBackground(new java.awt.Color(153, 153, 153));
-        jobsPanel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jobsPanel.setMaximumSize(new java.awt.Dimension(100, 100));
-        jobsPanel.setPreferredSize(new java.awt.Dimension(100, 100));
-
-        jLabel3.setText("jobs");
-
-        javax.swing.GroupLayout jobsPanelLayout = new javax.swing.GroupLayout(jobsPanel);
-        jobsPanel.setLayout(jobsPanelLayout);
-        jobsPanelLayout.setHorizontalGroup(
-            jobsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-            .addGroup(jobsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jobsPanelLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel3)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        jobsPanelLayout.setVerticalGroup(
-            jobsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-            .addGroup(jobsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jobsPanelLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel3)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-
-        mainPanel.add(jobsPanel, "jobsPanel");
-
-        customersPanel.setBackground(new java.awt.Color(153, 153, 153));
-
-        jLabel4.setText("customer");
-
-        javax.swing.GroupLayout customersPanelLayout = new javax.swing.GroupLayout(customersPanel);
-        customersPanel.setLayout(customersPanelLayout);
-        customersPanelLayout.setHorizontalGroup(
-            customersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 815, Short.MAX_VALUE)
-            .addGroup(customersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(customersPanelLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel4)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        customersPanelLayout.setVerticalGroup(
-            customersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 370, Short.MAX_VALUE)
-            .addGroup(customersPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(customersPanelLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel4)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-
-        mainPanel.add(customersPanel, "customersPanel");
 
         btpartsmenu.setText("Parts Menu");
         btpartsmenu.addActionListener(new java.awt.event.ActionListener() {
@@ -257,7 +137,7 @@ public class MainMenu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(btpartsmenu, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50)
@@ -269,7 +149,7 @@ public class MainMenu extends javax.swing.JFrame {
                 .addGap(50, 50, 50)
                 .addComponent(btlogout))
             .addComponent(lbluserid)
-            .addComponent(btview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btview, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE)
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btadminmenu, btcustomermenu, btjobsmenu, btlogout, btpartsmenu});
@@ -295,22 +175,36 @@ public class MainMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btpartsmenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btpartsmenuActionPerformed
-        CardLayout card = (CardLayout)mainPanel.getLayout();
-        card.show(mainPanel, "partsPanel");
+        listmodel.clear();
+        if  (listmodel.size() == 0) {
+            // parts menu options
+            listmodel.addElement("");
+            jListItem.setModel(listmodel);
+        }                    
     }//GEN-LAST:event_btpartsmenuActionPerformed
 
     private void btjobsmenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btjobsmenuActionPerformed
-        CardLayout card = (CardLayout)mainPanel.getLayout();
-        card.show(mainPanel, "jobsPanel");
+        listmodel.clear();
+        if  (listmodel.size() == 0) {
+            // jobs menu options
+            listmodel.addElement("");
+            jListItem.setModel(listmodel);
+        }                   
     }//GEN-LAST:event_btjobsmenuActionPerformed
 
     private void btcustomermenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btcustomermenuActionPerformed
-        CardLayout card = (CardLayout)mainPanel.getLayout();
-        card.show(mainPanel, "customersPanel");
+        listmodel.clear();
+        // customer menu options
+        if  (listmodel.size() == 0) {
+            listmodel.addElement("Add Customer");
+            listmodel.addElement("Edit/Delete Customer");
+            listmodel.addElement("Add Vehicle");
+            jListItem.setModel(listmodel);
+        }
     }//GEN-LAST:event_btcustomermenuActionPerformed
 
     private void btviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btviewActionPerformed
-        String selectedItem = jListadmin.getSelectedValue();
+        String selectedItem = jListItem.getSelectedValue();
         if(selectedItem == "Add User") {
             dispose();
             new AddUser(user);
@@ -323,36 +217,38 @@ public class MainMenu extends javax.swing.JFrame {
             dispose();
             new BackupRestoreDB(user);
         }
+        if (selectedItem == "Add Customer") {
+            dispose();
+            new CreateCustomer(user);
+        }
     }//GEN-LAST:event_btviewActionPerformed
 
     private void btlogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlogoutActionPerformed
-        System.exit(0);
+        dispose();
+        new Login();
     }//GEN-LAST:event_btlogoutActionPerformed
 
     private void btadminmenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btadminmenuActionPerformed
-        CardLayout card = (CardLayout)mainPanel.getLayout();
-        card.show(mainPanel, "adminPanel");
+        listmodel.clear();
+        if  (listmodel.size() == 0) {
+            // admin menu options
+            listmodel.addElement("Add User");
+            listmodel.addElement("Edit/Delete User");
+            listmodel.addElement("Backup/Restore Database");
+            jListItem.setModel(listmodel);
+        }  
     }//GEN-LAST:event_btadminmenuActionPerformed
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel adminPanel;
     private javax.swing.JButton btadminmenu;
     private javax.swing.JButton btcustomermenu;
     private javax.swing.JButton btjobsmenu;
     private javax.swing.JButton btlogout;
     private javax.swing.JButton btpartsmenu;
     private javax.swing.JButton btview;
-    private javax.swing.JPanel customersPanel;
-    private javax.swing.JPanel emptyPanel;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JList<String> jListadmin;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPanel jobsPanel;
+    private javax.swing.JList<String> jListItem;
     private javax.swing.JLabel lbluserid;
     private javax.swing.JPanel mainPanel;
-    private javax.swing.JPanel partsPanel;
     // End of variables declaration//GEN-END:variables
 
 }
