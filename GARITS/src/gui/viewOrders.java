@@ -21,7 +21,7 @@ public class viewOrders {
     List<String[]> mapping = new ArrayList<String[]>();
 
 
-    public viewOrders(Connection con){
+    public viewOrders(Connection con, JFrame prevFrame, JFrame thisFrame){
         SQLHelper viewHelp = new SQLHelper(con);
         int currDate = 542022;
         String getOrders = "SELECT * FROM Orders WHERE date = " + currDate;
@@ -43,6 +43,15 @@ public class viewOrders {
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 frame.pack();
                 frame.setVisible(true);
+            }
+        });
+        goBackButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                prevFrame.setVisible(true);
+                thisFrame.dispose();
+
             }
         });
     }

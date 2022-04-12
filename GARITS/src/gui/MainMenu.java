@@ -5,11 +5,11 @@
 package gui;
 
 import java.awt.CardLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import java.sql.*;
 
 import dbcon.DBConnect;
+import dbcon.SQLHelper;
 import user_accounts.User;
 
 /**
@@ -18,7 +18,17 @@ import user_accounts.User;
  */
 public class MainMenu extends javax.swing.JFrame {
 
-    DBConnect conn;
+    DBConnect conn = new DBConnect();
+    Connection con;
+
+    {
+        try {
+            con =  conn.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     DefaultListModel listmodel = new DefaultListModel();
     User user;
     
@@ -144,7 +154,7 @@ public class MainMenu extends javax.swing.JFrame {
         partsPanel.setBackground(new java.awt.Color(153, 153, 153));
         partsPanel.setPreferredSize(new java.awt.Dimension(942, 100));
 
-        jLabel2.setText("parts");
+        jLabel2.setText("");
 
         javax.swing.GroupLayout partsPanelLayout = new javax.swing.GroupLayout(partsPanel);
         partsPanel.setLayout(partsPanelLayout);
@@ -170,7 +180,7 @@ public class MainMenu extends javax.swing.JFrame {
         jobsPanel.setMaximumSize(new java.awt.Dimension(100, 100));
         jobsPanel.setPreferredSize(new java.awt.Dimension(100, 100));
 
-        jLabel3.setText("jobs");
+        jLabel3.setText("");
 
         javax.swing.GroupLayout jobsPanelLayout = new javax.swing.GroupLayout(jobsPanel);
         jobsPanel.setLayout(jobsPanelLayout);
@@ -197,7 +207,7 @@ public class MainMenu extends javax.swing.JFrame {
 
         customersPanel.setBackground(new java.awt.Color(153, 153, 153));
 
-        jLabel4.setText("customer");
+        jLabel4.setText("");
 
         javax.swing.GroupLayout customersPanelLayout = new javax.swing.GroupLayout(customersPanel);
         customersPanel.setLayout(customersPanelLayout);
@@ -311,6 +321,7 @@ public class MainMenu extends javax.swing.JFrame {
     private void btpartsmenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btpartsmenuActionPerformed
         CardLayout card = (CardLayout)mainPanel.getLayout();
         card.show(mainPanel, "partsPanel");
+        mainPanel.setName("partsPanel");
         populateParts(user);
         //card.show(partsPanel, "partsPanel");
         //card.show(jListadmin, "Parts");
@@ -329,13 +340,27 @@ public class MainMenu extends javax.swing.JFrame {
     private void btviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btviewActionPerformed
         String activePanel = mainPanel.getName();
         String selectedItem = jListadmin.getSelectedValue();
+        JFrame frame;
+        //System.out.println(activePanel);
         try{
             switch(activePanel){
                 case "partsPanel":
                     switch (selectedItem){
                         case "View Orders":
-                            dispose();
-                            //new viewOrders( conn = new DBConnect());
+                            //dispose();
+                            this.setVisible(false);
+                            frame = new JFrame("Order");
+                            frame.setContentPane(new viewOrders(con, this, frame).orderView);
+                            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                            frame.pack();
+                            frame.setVisible(true);
+                        case "Create Order":
+                            this.setVisible(false);
+                            frame = new JFrame("Order");
+                            frame.setContentPane(new orderForm(con, this, frame).formView);
+                            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                            frame.pack();
+                            frame.setVisible(true);
                     }
             }
             if(selectedItem == "Add User") {

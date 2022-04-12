@@ -29,7 +29,7 @@ public class orderForm {
     int randOrderNo;
     static Random rand = new Random();
 
-    public orderForm(Connection con) {
+    public orderForm(Connection con, JFrame prevFrame, JFrame thisFrame) {
         /*try {
             con.setAutoCommit(false);
         } catch (SQLException e) {
@@ -112,6 +112,14 @@ public class orderForm {
                     ex.printStackTrace();
                 }
 
+            }
+        });
+        goBackButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                prevFrame.setVisible(true);
+                thisFrame.dispose();
             }
         });
     }
