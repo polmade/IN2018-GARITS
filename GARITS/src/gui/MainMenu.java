@@ -330,11 +330,13 @@ public class MainMenu extends javax.swing.JFrame {
     private void btjobsmenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btjobsmenuActionPerformed
         CardLayout card = (CardLayout)mainPanel.getLayout();
         card.show(mainPanel, "jobsPanel");
+        mainPanel.setName("jobsPanel");
     }//GEN-LAST:event_btjobsmenuActionPerformed
 
     private void btcustomermenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btcustomermenuActionPerformed
         CardLayout card = (CardLayout)mainPanel.getLayout();
         card.show(mainPanel, "customersPanel");
+        mainPanel.setName("customersPanel");
     }//GEN-LAST:event_btcustomermenuActionPerformed
 
     private void btviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btviewActionPerformed
@@ -362,6 +364,11 @@ public class MainMenu extends javax.swing.JFrame {
                             frame.pack();
                             frame.setVisible(true);
                     }
+                case "jobsPanel":
+                    switch (selectedItem){
+                    }
+                case "customersPanel":
+
             }
             if(selectedItem == "Add User") {
                 dispose();
