@@ -10,7 +10,6 @@ package customer_account;
  */
 public class AccountHolder extends Customer {
     
-    private String accountID;
     private boolean payLater = false;
     private String discountType;
     
@@ -20,10 +19,6 @@ public class AccountHolder extends Customer {
     /**
      * Setters
      */
-    public void setAccountID(String accountID) {
-        this.accountID = accountID;
-    }
-    
     public void setPayLater(boolean payLater) {
         this.payLater = payLater;
     }
@@ -34,11 +29,7 @@ public class AccountHolder extends Customer {
     
     /**
      * Getters
-     */
-    public String getAccountID() {
-        return accountID;
-    }
-    
+     */ 
     public boolean getPayLater() {
         return payLater;
     }
