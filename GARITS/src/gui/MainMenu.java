@@ -16,10 +16,11 @@ import user_accounts.User;
  *
  * @author hnaro
  */
-public class MainMenu extends javax.swing.JFrame {
+public class MainMenu extends javax.swing.JFrame{
 
     DBConnect conn = new DBConnect();
     Connection con;
+    JFrame frame;
 
     {
         try {
@@ -61,7 +62,7 @@ public class MainMenu extends javax.swing.JFrame {
         // making the menu list to single selection
         jListItem.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
-
+    /*
     private void populateParts(User user){
         this.lbluserid.setText(user.getUsername());
         jListadmin.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -70,7 +71,7 @@ public class MainMenu extends javax.swing.JFrame {
         partsListModel.addElement("Create Order");
         jListadmin.setModel(partsListModel);
         partsPanel.add(jListadmin);
-    }
+    }*/
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -80,7 +81,6 @@ public class MainMenu extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         mainPanel = new javax.swing.JPanel();
         jListItem = new javax.swing.JList<>();
         btpartsmenu = new javax.swing.JButton();
@@ -206,7 +206,9 @@ public class MainMenu extends javax.swing.JFrame {
         listmodel.clear();
         if  (listmodel.size() == 0) {
             // parts menu options
-            listmodel.addElement("");
+            listmodel.addElement("Create Order");
+            listmodel.addElement("View Orders");
+            listmodel.addElement("View Spare Parts");
             jListItem.setModel(listmodel);
         }                    
     }//GEN-LAST:event_btpartsmenuActionPerformed
@@ -233,28 +235,69 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void btviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btviewActionPerformed
         String selectedItem = jListItem.getSelectedValue();
-        if(selectedItem == "Add User") {
-            dispose();
-            new AddUser(user);
-        }
-        if (selectedItem == "Edit/Delete User") {
-            dispose();
-            new EditDeleteUser(user);
-        }
-        if (selectedItem == "Backup/Restore Database") {
-            dispose();
-            new BackupRestoreDB(user);
-        }
-        if (selectedItem == "Add Customer") {
-            dispose();
-            new CreateCustomer(user);
+        System.out.println(selectedItem);
+        try{
+            switch(selectedItem){
+                case "Add User" -> {
+                    dispose();
+                    new AddUser(user);
+                }
+                case "Edit/Delete User" -> {
+                    dispose();
+                    new EditDeleteUser(user);
+                }
+
+                case "Backup/Restore Database" -> {
+                    dispose();
+                    new BackupRestoreDB(user);
+                }
+
+                case "Add Customer" -> {
+                    dispose();
+                    new CreateCustomer(user);
+                }
+
+                case "View Orders" -> {
+                    this.setVisible(false);
+                    frame = new JFrame("Order");
+                    frame.setContentPane(new viewOrders(con, this, frame).orderView);
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.pack();
+                    frame.setVisible(true);
+                }
+
+                case "Create Order" -> {
+                    this.setVisible(false);
+                    frame = new JFrame("Order");
+                    frame.setContentPane(new orderForm(con, this, frame).formView);
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.pack();
+                    frame.setVisible(true);
+                }
+
+                case "View Spare Parts" -> {
+                    this.setVisible(false);
+                    frame = new JFrame("Order");
+                    frame.setContentPane(new viewSpareParts(con, this, frame).sparePanel);
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.pack();
+                    frame.setVisible(true);
+                }
+            }
+        } catch (SQLException ex){
+            ex.printStackTrace();
         }
 
     }//GEN-LAST:event_btviewActionPerformed
 
     private void btlogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlogoutActionPerformed
         dispose();
-        new Login();
+        try{
+
+            new Login();
+        } catch (SQLException ex){
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_btlogoutActionPerformed
 
     private void btadminmenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btadminmenuActionPerformed
