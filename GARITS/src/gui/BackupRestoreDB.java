@@ -7,6 +7,11 @@ package gui;
 import dbcon.DBConnect;
 import dbcon.SQLHelper;
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +28,8 @@ public class BackupRestoreDB extends javax.swing.JFrame {
     SQLHelper sqlhelper;
     DBConnect conn;
     User user;
-    
+    Connection con;
+
     /**
      * Creates new form BackupRestoreDB
      * @param 
@@ -135,7 +141,22 @@ public class BackupRestoreDB extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO Back up databse
+        String filePath = "/Volumes//GARITS-NEW/GARITS/data/backupDB.sql";
+        String command = "zsh";
+        String command2 = "mysqldump GARITS > "+filePath;
+        try {
+            //System.out.println("Here");
+            Process child = Runtime.getRuntime().exec(command);
+            //System.out.println("Here 2");
+            OutputStream out = child.getOutputStream();
+            out.write(command2.getBytes(StandardCharsets.UTF_8));
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -143,8 +164,21 @@ public class BackupRestoreDB extends javax.swing.JFrame {
         chooser.showOpenDialog(null);
         File file = chooser.getSelectedFile();
         String filename = file.getAbsolutePath();
-        
-        // TODO restore database
+        String command = "mysql GARITS2 < " + filename;
+
+        try {
+            //System.out.println("Here");
+            Process child = Runtime.getRuntime().exec("zsh");
+            //System.out.println("Here 2");
+            OutputStream out = child.getOutputStream();
+            out.write(command.getBytes(StandardCharsets.UTF_8));
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

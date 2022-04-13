@@ -209,6 +209,7 @@ public class MainMenu extends javax.swing.JFrame{
             listmodel.addElement("Create Order");
             listmodel.addElement("View Orders");
             listmodel.addElement("View Spare Parts");
+            listmodel.addElement("Add New Part");
             jListItem.setModel(listmodel);
         }                    
     }//GEN-LAST:event_btpartsmenuActionPerformed
@@ -217,7 +218,9 @@ public class MainMenu extends javax.swing.JFrame{
         listmodel.clear();
         if  (listmodel.size() == 0) {
             // jobs menu options
-            listmodel.addElement("");
+            listmodel.addElement("Create Job");
+            listmodel.addElement("Take Job");
+            listmodel.addElement("View Jobs");
             jListItem.setModel(listmodel);
         }                   
     }//GEN-LAST:event_btjobsmenuActionPerformed
@@ -235,7 +238,7 @@ public class MainMenu extends javax.swing.JFrame{
 
     private void btviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btviewActionPerformed
         String selectedItem = jListItem.getSelectedValue();
-        System.out.println(selectedItem);
+        //System.out.println(selectedItem);
         try{
             switch(selectedItem){
                 case "Add User" -> {
@@ -277,8 +280,17 @@ public class MainMenu extends javax.swing.JFrame{
 
                 case "View Spare Parts" -> {
                     this.setVisible(false);
-                    frame = new JFrame("Order");
+                    frame = new JFrame("View Parts");
                     frame.setContentPane(new viewSpareParts(con, this, frame).sparePanel);
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.pack();
+                    frame.setVisible(true);
+                }
+
+                case "Add New Part" -> {
+                    this.setVisible(false);
+                    frame = new JFrame("Add Part");
+                    frame.setContentPane(new addParts(con, this, frame).addPartPanel);
                     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     frame.pack();
                     frame.setVisible(true);
