@@ -11,8 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import user_accounts.User;
@@ -73,7 +71,7 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
     }
     
     /*
-     * Updates user information with selected user
+     * Updates customer information with selected customer
      * @param 
     */
     private void SelectedCustomer() {
@@ -340,7 +338,7 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
         try {
             conn.close();
         } catch (SQLException ex) {
-            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }
         new MainMenu(user);
     }//GEN-LAST:event_btbackActionPerformed
@@ -354,6 +352,14 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
             // remove customer from jlist and db
             int confirm = JOptionPane.showConfirmDialog(null, "Are you Sure you want to delete the user?", "Delete User", JOptionPane.YES_NO_OPTION);
             if(confirm == JOptionPane.YES_OPTION) {
+                // delete all vehicles that belong to this customer
+                try {
+                    String sql = ("DELETE FROM Vehicle WHERE Customerid='"+id+"';");
+                    sqlhelper.updateTable(sql);
+                } catch (SQLException e) {
+                    System.err.println(e.getMessage());
+                }
+                // delete customer details
                 try {
                     String sql = ("DELETE FROM Customer WHERE id='"+id+"';");
                     sqlhelper.updateTable(sql);
@@ -389,7 +395,7 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
     }//GEN-LAST:event_bteditActionPerformed
 
     private void btconfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btconfirmActionPerformed
-        if (tfid.getText().equals("")) {
+        if (tfid.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Cannot update customer", "Error", JOptionPane.ERROR_MESSAGE);
         } 
         else if (validateFields() == true) {

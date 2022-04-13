@@ -7,12 +7,8 @@ package gui;
 import javax.swing.JOptionPane;
 import dbcon.DBConnect;
 import dbcon.SQLHelper;
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import user_accounts.User;
 
 /**
@@ -197,7 +193,7 @@ public class Login extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Username / Password not found.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                System.err.println(ex.getMessage());
             }
         }
     }//GEN-LAST:event_btloginActionPerformed

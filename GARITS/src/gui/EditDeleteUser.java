@@ -8,8 +8,6 @@ import dbcon.DBConnect;
 import dbcon.SQLHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import user_accounts.Mechanic;
@@ -181,8 +179,6 @@ public class EditDeleteUser extends javax.swing.JFrame {
             }
         });
 
-        tfusername.setEnabled(false);
-
         tfhourlyrate.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 tfhourlyrateKeyTyped(evt);
@@ -333,84 +329,103 @@ public class EditDeleteUser extends javax.swing.JFrame {
         try {
             conn.close();
         } catch (SQLException ex) {
-            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }
         new MainMenu(user);
     }//GEN-LAST:event_btbackActionPerformed
 
     private void btconfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btconfirmActionPerformed
+        String message = "";
         boolean flag = true;
         if (tfname.getText().isEmpty() || tfusername.getText().isEmpty() || tfpassword.getText().isEmpty()) {
+            message = "Please fill in all the boxes";
             flag = false;
         }
         // check if hourly rate text field is enabled and empty
         else if (tfhourlyrate.isEnabled() && tfhourlyrate.getText().isEmpty()) {
+            message = "Please fill in all the boxes";
             flag = false;
         } else {
-            // edit user
             try {
-                String sql = ("UPDATE user "
-                        + "SET name='" + tfname.getText() + "',"
-                        + "role = '" + cbrole.getSelectedItem().toString() + "',"
-                        + "password = '" + tfpassword.getText() + "'"
-                        + "WHERE username = '" +tfusername.getText()+"';");
-                sqlhelper.updateTable(sql);
+                ResultSet rs = sqlhelper.getQuery("select * from user");
+                while (rs.next()) {
+                    String username = rs.getString("username");
+                    if (username.equals(tfusername.getText()) && !tfusername.getText().equals(selectedUser.getUsername())) {
+                        message = "Username already exists";
+                        flag = false;
+                    }
+                }
             } catch(SQLException e) {
                 System.err.println(e.getMessage());
             }
-            
-            // if user == "mechanic"
-            if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")) {
+            if (flag) {
+                // edit user
                 try {
-                    String sql = ("UPDATE mechanic "
-                            + "SET hourly_rate='"+tfhourlyrate.getText()+"'"
-                            + "WHERE username='"+tfusername.getText()+"';");
+                    String sql = ("UPDATE user "
+                            + "SET name='" + tfname.getText() + "',"
+                            + "role = '" + cbrole.getSelectedItem().toString() + "',"
+                            + "username = '" + tfusername.getText() + "',"
+                            + "password = '" + tfpassword.getText() + "'"
+                            + "WHERE username = '" +selectedUser.getUsername()+"';");
                     sqlhelper.updateTable(sql);
                 } catch(SQLException e) {
                     System.err.println(e.getMessage());
                 }
-            }
-            // if selected user was not mechanic, but updating to mechanic
-            if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")
-                    && !selectedUser.getRole().equals("Mechanic")) {
-                try {
-                    String sql = ("insert into mechanic (username, hourly_rate)" 
-                            + "values("
-                            + "'" + tfusername.getText() + "',"
-                            + "'" + tfhourlyrate.getText() + "')");
-                    sqlhelper.updateTable(sql);
-                } catch(SQLException e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-            // if selected user was mechanic, but updating to any other role
-            if(cbrole.getSelectedItem() != null && selectedUser.getRole().equals("Mechanic")) {
-                // if not updating user role
-                if (cbrole.getSelectedItem().equals("Mechanic")) {
+
+                // if user == "mechanic"
+                if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")) {
                     try {
                         String sql = ("UPDATE mechanic "
-                            + "SET hourly_rate='"+tfhourlyrate.getText()+"'"
-                            + "WHERE username='"+tfusername.getText()+"';");
+                                + "SET username='" + tfusername.getText() + "',"
+                                + "hourly_rate='"+tfhourlyrate.getText()+"'"
+                                + "WHERE username='"+selectedUser.getUsername()+"';");
                         sqlhelper.updateTable(sql);
                     } catch(SQLException e) {
                         System.err.println(e.getMessage());
                     }
                 }
-                // if updating user role
-                if (!cbrole.getSelectedItem().equals("Mechanic")) {
+                // if selected user was not mechanic, but updating to mechanic
+                if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")
+                        && !selectedUser.getRole().equals("Mechanic")) {
                     try {
-                        String sql = ("DELETE FROM mechanic WHERE username='"+selectedUser.getUsername()+"';");
+                        String sql = ("insert into mechanic (username, hourly_rate)" 
+                                + "values("
+                                + "'" + tfusername.getText() + "',"
+                                + "'" + tfhourlyrate.getText() + "')");
                         sqlhelper.updateTable(sql);
                     } catch(SQLException e) {
                         System.err.println(e.getMessage());
                     }
                 }
+                // if selected user was mechanic, but updating to any other role
+                if(cbrole.getSelectedItem() != null && selectedUser.getRole().equals("Mechanic")) {
+                    // if not updating user role
+                    if (cbrole.getSelectedItem().equals("Mechanic")) {
+                        try {
+                            String sql = ("UPDATE mechanic "
+                                + "SET hourly_rate='"+tfhourlyrate.getText()+"'"
+                                + "WHERE username='"+tfusername.getText()+"';");
+                            sqlhelper.updateTable(sql);
+                        } catch(SQLException e) {
+                            System.err.println(e.getMessage());
+                        }
+                    }
+                    // if updating user role
+                    if (!cbrole.getSelectedItem().equals("Mechanic")) {
+                        try {
+                            String sql = ("DELETE FROM mechanic WHERE username='"+selectedUser.getUsername()+"';");
+                            sqlhelper.updateTable(sql);
+                        } catch(SQLException e) {
+                            System.err.println(e.getMessage());
+                        }
+                    }
+                }
+                clearAllFields();
             }
-            clearAllFields();
         }
         
         if (!flag) {
-            JOptionPane.showMessageDialog(this, "Please fill in all the boxes", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "User updated");
             UpdateList();

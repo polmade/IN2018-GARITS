@@ -38,35 +38,35 @@ public class Vehicle {
     /**
      * Setters
      */
-    public void SetRegistrationNo(String registrationNo) {
+    public void setRegistrationNo(String registrationNo) {
         this.registrationNo = registrationNo;
     }
     
-    public void SeMake(String make) {
+    public void setMake(String make) {
         this.make = make;
     }
     
-    public void SetModel(String model) {
+    public void setModel(String model) {
         this.model = model;
     }
     
-    public void SetEngSerial(String engSerial) {
+    public void setEngSerial(String engSerial) {
         this.engSerial = engSerial;
     }
     
-    public void SetChassisNo(String chassisNo) {
+    public void setChassisNo(String chassisNo) {
         this.chassisNo = chassisNo;
     }
     
-    public void SetColour(String colour) {
+    public void setColour(String colour) {
         this.colour = colour;
     }
     
-    public void SetNextMoTDate(String nextMoTDate) {
+    public void setNextMoTDate(String nextMoTDate) {
         this.nextMoTDate = nextMoTDate;
     }
     
-    public void SetNextServiceDate(String nextServiceDate) {
+    public void setNextServiceDate(String nextServiceDate) {
         this.nextServiceDate = nextServiceDate;
     }
     

@@ -4,12 +4,9 @@
  */
 package gui;
 
-import java.awt.CardLayout;
 import javax.swing.*;
 import java.sql.*;
-
 import dbcon.DBConnect;
-import dbcon.SQLHelper;
 import user_accounts.User;
 
 /**
@@ -235,6 +232,7 @@ public class MainMenu extends javax.swing.JFrame{
             listmodel.addElement("Add Customer");
             listmodel.addElement("Edit/Delete Customer");
             listmodel.addElement("Add Vehicle");
+            listmodel.addElement("Edit/Delete Vehicle");
             jListItem.setModel(listmodel);
         }
     }//GEN-LAST:event_btcustomermenuActionPerformed
@@ -270,7 +268,12 @@ public class MainMenu extends javax.swing.JFrame{
                 
                 case "Add Vehicle" -> {
                     dispose();
-                    new Vehicle(user);
+                    new AddVehicle(user);
+                }
+                
+                case "Edit/Delete Vehicle" -> {
+                    dispose();
+                    new EditDeleteVehicle(user);
                 }
 
                 case "View Orders" -> {

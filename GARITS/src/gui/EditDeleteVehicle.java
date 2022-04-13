@@ -1,0 +1,414 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package gui;
+
+import customer_account.Vehicle;
+import dbcon.DBConnect;
+import dbcon.SQLHelper;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
+import user_accounts.User;
+
+/**
+ *
+ * @author hnaro
+ */
+public class EditDeleteVehicle extends javax.swing.JFrame {
+    
+    SQLHelper sqlhelper;
+    DBConnect conn;
+    User user;
+    Vehicle vehicle = new Vehicle();
+    DefaultListModel vehiclesListModel = new DefaultListModel();
+    List<String> splitStr;
+    
+    /**
+     * Creates new form EditDeleteVehicle
+     */
+    public EditDeleteVehicle(User user) throws SQLException {
+        this.user = user;
+        initComponents();
+        setTitle("Edit/Delete Vehicle | GARITS");
+        setVisible(true);
+        
+        conn = new DBConnect();
+        if (conn == null) {
+            JOptionPane.showMessageDialog(this, "DB connection failed.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            sqlhelper = new SQLHelper(conn.open());
+        }
+        
+        UpdateList();
+    }
+    
+    /*
+     * update the jListVehicles with all vehicles in db
+     * @param 
+    */
+    private void UpdateList() {
+        // get all customer from table Customer
+        try {
+            ResultSet rs = sqlhelper.getQuery("select * from Vehicle");
+            // clear current list in jListusers
+            jListVehicles.removeAll();
+            vehiclesListModel.clear();
+            while (rs.next()) {
+                String regNo = rs.getString("reg_no");
+                String make = rs.getString("make");
+                String model = rs.getString("model");
+                String customerID = rs.getString("Customerid");
+                vehiclesListModel.addElement(regNo + ", " +make +", "+model +", "+customerID);
+            } 
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        // add list model to jList
+        jListVehicles.setModel(vehiclesListModel);
+    }
+    
+    /*
+     * Updates vehicle information with the selected vehicle
+     * @param 
+    */
+    private void SelectedVehicle() {
+        if(jListVehicles.getSelectedValue() == null) {
+            JOptionPane.showMessageDialog(this, "Please select a vehicle", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            splitStr = Arrays.asList(jListVehicles.getSelectedValue().split(","));
+            // get selected user
+            try {
+                ResultSet rs = sqlhelper.getQuery("Select * from Vehicle where reg_no='"+splitStr.get(0)+"'");
+                while (rs.next()) {
+                    vehicle.setRegistrationNo(rs.getString("reg_no"));
+                    vehicle.setMake(rs.getString("make"));
+                    vehicle.setModel(rs.getString("model"));
+                    vehicle.setEngSerial(rs.getString("engine_serial"));
+                    vehicle.setChassisNo(rs.getString("vin"));
+                    vehicle.setColour(rs.getString("colour"));
+                }
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+    }
+    
+    /**
+     * Text fields validations
+     */
+    private boolean validateFields() {
+        boolean validated = false;
+        String REGNO_PATTERN = "^(?=.{1,7})(([a-zA-Z]?){1,3}(\\d){1,3}([a-zA-Z]?){1,3})$";
+        
+        // check for empty fields
+        if (tfregno.getText().isEmpty() || tfmake.getText().isEmpty() || 
+                tfmodel.getText().isEmpty() || tfengineno.getText().isEmpty()
+                || tfchassisno.getText().isEmpty() || tfcolour.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all the boxes", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        // email pattern from https://howtodoinjava.com/java/regex/java-regex-validate-email-address/
+        else if (!tfregno.getText().matches(REGNO_PATTERN)){
+            JOptionPane.showMessageDialog(this, "Invalid registration number", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            validated = true;
+        }
+        return validated;
+    }
+    
+    /*
+     * Clears all fields
+     * @param 
+    */
+    private void clearAllFields() {
+        tfcustomerid.setText(null);
+        tfregno.setText(null);
+        tfmake.setText(null);
+        tfmodel.setText(null);
+        tfengineno.setText(null);
+        tfchassisno.setText(null);
+        tfcolour.setText(null);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        lbltitle = new javax.swing.JLabel();
+        btback = new javax.swing.JButton();
+        lblselectvehicle = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListVehicles = new javax.swing.JList<>();
+        btedit = new javax.swing.JButton();
+        tfcustomerid = new javax.swing.JTextField();
+        lblcustomerid = new javax.swing.JLabel();
+        lblregistrationno = new javax.swing.JLabel();
+        tfregno = new javax.swing.JTextField();
+        tfmake = new javax.swing.JTextField();
+        lblmake = new javax.swing.JLabel();
+        lblmodel = new javax.swing.JLabel();
+        tfmodel = new javax.swing.JTextField();
+        tfengineno = new javax.swing.JTextField();
+        lblengineno = new javax.swing.JLabel();
+        lblchassisno = new javax.swing.JLabel();
+        tfchassisno = new javax.swing.JTextField();
+        tfcolour = new javax.swing.JTextField();
+        lblcolour = new javax.swing.JLabel();
+        btconfirm = new javax.swing.JButton();
+        btdelete = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+
+        lbltitle.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lbltitle.setText("Edit/Delete Vehicle");
+
+        btback.setText("Back");
+        btback.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btbackActionPerformed(evt);
+            }
+        });
+
+        lblselectvehicle.setText("Select Vehicle: ");
+
+        jScrollPane1.setViewportView(jListVehicles);
+
+        btedit.setText("Edit Vehicle");
+        btedit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bteditActionPerformed(evt);
+            }
+        });
+
+        tfcustomerid.setEnabled(false);
+
+        lblcustomerid.setText("Customer ID: ");
+
+        lblregistrationno.setText("Registration No: ");
+
+        lblmake.setText("Make: ");
+
+        lblmodel.setText("Model: ");
+
+        lblengineno.setText("Engine Serial No: ");
+
+        lblchassisno.setText("Chassis No: ");
+
+        lblcolour.setText("Colour: ");
+
+        btconfirm.setText("Confirm");
+        btconfirm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btconfirmActionPerformed(evt);
+            }
+        });
+
+        btdelete.setText("Delete Vehicle");
+        btdelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btdeleteActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(btback)
+                .addGap(71, 71, 71)
+                .addComponent(lbltitle)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btconfirm)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblselectvehicle))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btedit)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btdelete))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(101, 101, 101)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblregistrationno)
+                            .addComponent(lblmake)
+                            .addComponent(lblmodel)
+                            .addComponent(lblengineno)
+                            .addComponent(lblchassisno)
+                            .addComponent(lblcolour)
+                            .addComponent(lblcustomerid))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tfengineno)
+                            .addComponent(tfchassisno)
+                            .addComponent(tfcolour)
+                            .addComponent(tfmodel)
+                            .addComponent(tfmake)
+                            .addComponent(tfregno, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                            .addComponent(tfcustomerid))))
+                .addContainerGap(55, Short.MAX_VALUE))
+        );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btconfirm, btdelete, btedit});
+
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btback)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lbltitle)))
+                .addGap(8, 8, 8)
+                .addComponent(lblselectvehicle)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btedit)
+                    .addComponent(btdelete))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfcustomerid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblcustomerid))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblregistrationno)
+                    .addComponent(tfregno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblmake)
+                    .addComponent(tfmake, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblmodel)
+                    .addComponent(tfmodel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblengineno)
+                    .addComponent(tfengineno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblchassisno)
+                    .addComponent(tfchassisno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblcolour)
+                    .addComponent(tfcolour, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btconfirm)
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbackActionPerformed
+        dispose();
+        try {
+            conn.close();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
+        new MainMenu(user);
+    }//GEN-LAST:event_btbackActionPerformed
+
+    private void bteditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bteditActionPerformed
+        SelectedVehicle();
+        if (jListVehicles.getSelectedValue() != null) {
+            tfcustomerid.setText(splitStr.get(3));
+            tfregno.setText(vehicle.getRegistrationNo());
+            tfmake.setText(vehicle.getMake());
+            tfmodel.setText(vehicle.getModel());
+            tfengineno.setText(vehicle.getEngSerial());
+            tfchassisno.setText(vehicle.getChassisNo());
+            tfcolour.setText(vehicle.getColour());
+            jListVehicles.clearSelection();
+        }
+    }//GEN-LAST:event_bteditActionPerformed
+
+    private void btconfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btconfirmActionPerformed
+        if (tfcustomerid.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Cannot update customer", "Error", JOptionPane.ERROR_MESSAGE);
+        } 
+        else if (validateFields() == true) {
+            try {
+                String sql = ("UPDATE Vehicle "
+                            + "SET reg_no='" + tfregno.getText() + "', "
+                            + "make='" + tfmake.getText() + "', "
+                            + "model='" + tfmodel.getText() + "', "
+                            + "engine_serial='" + tfengineno.getText() + "', "
+                            + "vin='" + tfchassisno.getText() + "', "
+                            + "colour='" + tfcolour.getText() + "' "
+                            + "WHERE reg_no='" + vehicle.getRegistrationNo() + "';");
+                sqlhelper.updateTable(sql);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            clearAllFields();
+            JOptionPane.showMessageDialog(this, "Vehicle updated");
+            UpdateList();
+        }
+    }//GEN-LAST:event_btconfirmActionPerformed
+
+    private void btdeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btdeleteActionPerformed
+        SelectedVehicle();
+        String regNo = vehicle.getRegistrationNo();
+        if(jListVehicles.getSelectedValue() == null) {
+            // do nothing
+        } else {
+            // remove customer from jlist and db
+            int confirm = JOptionPane.showConfirmDialog(null, "Are you Sure you want to delete the user?", "Delete User", JOptionPane.YES_NO_OPTION);
+            if(confirm == JOptionPane.YES_OPTION) {
+                try {
+                    String sql = ("DELETE FROM Vehicle WHERE reg_no='"+regNo+"';");
+                    sqlhelper.updateTable(sql);
+                } catch (SQLException e) {
+                    System.err.println(e.getMessage());
+                }
+                UpdateList();
+                clearAllFields();
+            }
+        }
+    }//GEN-LAST:event_btdeleteActionPerformed
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btback;
+    private javax.swing.JButton btconfirm;
+    private javax.swing.JButton btdelete;
+    private javax.swing.JButton btedit;
+    private javax.swing.JList<String> jListVehicles;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblchassisno;
+    private javax.swing.JLabel lblcolour;
+    private javax.swing.JLabel lblcustomerid;
+    private javax.swing.JLabel lblengineno;
+    private javax.swing.JLabel lblmake;
+    private javax.swing.JLabel lblmodel;
+    private javax.swing.JLabel lblregistrationno;
+    private javax.swing.JLabel lblselectvehicle;
+    private javax.swing.JLabel lbltitle;
+    private javax.swing.JTextField tfchassisno;
+    private javax.swing.JTextField tfcolour;
+    private javax.swing.JTextField tfcustomerid;
+    private javax.swing.JTextField tfengineno;
+    private javax.swing.JTextField tfmake;
+    private javax.swing.JTextField tfmodel;
+    private javax.swing.JTextField tfregno;
+    // End of variables declaration//GEN-END:variables
+}
