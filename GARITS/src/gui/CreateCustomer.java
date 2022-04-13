@@ -6,8 +6,6 @@ package gui;
 
 import dbcon.DBConnect;
 import dbcon.SQLHelper;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import user_accounts.User;
@@ -231,6 +229,11 @@ public class CreateCustomer extends javax.swing.JFrame {
 
     private void btbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbackActionPerformed
         dispose();
+        try {
+            conn.close();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
         new MainMenu(user);
     }//GEN-LAST:event_btbackActionPerformed
 

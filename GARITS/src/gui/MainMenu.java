@@ -4,12 +4,9 @@
  */
 package gui;
 
-import java.awt.CardLayout;
 import javax.swing.*;
 import java.sql.*;
-
 import dbcon.DBConnect;
-import dbcon.SQLHelper;
 import user_accounts.User;
 
 /**
@@ -42,11 +39,19 @@ public class MainMenu extends javax.swing.JFrame{
         initComponents();
         setTitle("Mainmenu | GARITS");
         setVisible(true);
+        // privilege
         // if the user is admin, admin menu set to enable and other to disable
         if (user.getRole().equalsIgnoreCase("Administrator")) {
             btadminmenu.setEnabled(true);
             btpartsmenu.setEnabled(false);
             btjobsmenu.setEnabled(false);
+            btcustomermenu.setEnabled(false);
+        }
+        // user is mechanic
+        if (user.getRole().equalsIgnoreCase("Mechanic")) {
+            btadminmenu.setEnabled(false);
+            btpartsmenu.setEnabled(true);
+            btjobsmenu.setEnabled(true);
             btcustomermenu.setEnabled(false);
         }
         populateAdmin(user);
@@ -81,6 +86,7 @@ public class MainMenu extends javax.swing.JFrame{
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
         mainPanel = new javax.swing.JPanel();
         jListItem = new javax.swing.JList<>();
         btpartsmenu = new javax.swing.JButton();
@@ -99,13 +105,11 @@ public class MainMenu extends javax.swing.JFrame{
         mainPanel.setBackground(new java.awt.Color(204, 204, 204));
         mainPanel.setPreferredSize(new java.awt.Dimension(0, 370));
 
-
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jListItem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,7 +117,6 @@ public class MainMenu extends javax.swing.JFrame{
                 .addComponent(jListItem, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
-
 
         btpartsmenu.setText("Parts Menu");
         btpartsmenu.addActionListener(new java.awt.event.ActionListener() {
@@ -219,8 +222,9 @@ public class MainMenu extends javax.swing.JFrame{
         if  (listmodel.size() == 0) {
             // jobs menu options
             listmodel.addElement("Create Job");
-            listmodel.addElement("Take Job");
+            listmodel.addElement("Allocate Job");
             listmodel.addElement("View Jobs");
+
             jListItem.setModel(listmodel);
         }                   
     }//GEN-LAST:event_btjobsmenuActionPerformed
@@ -232,6 +236,7 @@ public class MainMenu extends javax.swing.JFrame{
             listmodel.addElement("Add Customer");
             listmodel.addElement("Edit/Delete Customer");
             listmodel.addElement("Add Vehicle");
+            listmodel.addElement("Edit/Delete Vehicle");
             jListItem.setModel(listmodel);
         }
     }//GEN-LAST:event_btcustomermenuActionPerformed
@@ -258,6 +263,36 @@ public class MainMenu extends javax.swing.JFrame{
                 case "Add Customer" -> {
                     dispose();
                     new CreateCustomer(user);
+                }
+                
+                case "Edit/Delete Customer" -> {
+                    dispose();
+                    new EditDeleteCustomer(user);
+                }
+                
+                case "Add Vehicle" -> {
+                    dispose();
+                    new AddVehicle(user);
+                }
+                
+                case "Edit/Delete Vehicle" -> {
+                    dispose();
+                    new EditDeleteVehicle(user);
+                }
+                
+                case "Create Job" -> {
+                    dispose();
+                    new CreateJob(user);
+                }
+                
+                case "Allocate Job" -> {
+                    dispose();
+                    new AllocateJob(user);
+                }
+                
+                case "View Job" -> {
+                    dispose();
+                    new ViewJob(user);
                 }
 
                 case "View Orders" -> {

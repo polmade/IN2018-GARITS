@@ -6,9 +6,8 @@ package gui;
 
 import dbcon.DBConnect;
 import dbcon.SQLHelper;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import user_accounts.User;
 /**
@@ -185,7 +184,7 @@ public class AddUser extends javax.swing.JFrame {
         try {
             conn.close();
         } catch (SQLException ex) {
-            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }
         new MainMenu(user);
     }//GEN-LAST:event_btbackActionPerformed
@@ -201,6 +200,7 @@ public class AddUser extends javax.swing.JFrame {
 
     private void btcreatenewuserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btcreatenewuserActionPerformed
         boolean flag = true;
+        boolean exists = false;
         // check for empty fields
         if (tfname.getText().isEmpty() || tfusername.getText().isEmpty() || tfpassword.getText().isEmpty()
                 || cbrole.getSelectedIndex() == -1) {
@@ -212,34 +212,45 @@ public class AddUser extends javax.swing.JFrame {
         } else {
             // create new user
             try {
-                String sql = ("insert into user (name, role, username, password)" 
-                        + "values("
-                        + "'" + tfname.getText() + "',"
-                        + "'" + cbrole.getSelectedItem().toString() + "',"
-                        + "'" + tfusername.getText() + "',"
-                        + "'" + tfpassword.getText() + "')");
-                sqlhelper.updateTable(sql);
+                ResultSet rs = sqlhelper.getQuery("select * from user");
+                while (rs.next()) {
+                    String username = rs.getString("username");
+                    if (username.equals(tfusername.getText())) {
+                        exists = true;
+                    }
+                }
+                if (!exists) {
+                    String sql = ("insert into user (name, role, username, password)" 
+                            + "values("
+                            + "'" + tfname.getText() + "',"
+                            + "'" + cbrole.getSelectedItem().toString() + "',"
+                            + "'" + tfusername.getText() + "',"
+                            + "'" + tfpassword.getText() + "')");
+                    sqlhelper.updateTable(sql);
+                    
+                    // if user == "mechanic"
+                    if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")) {
+                        try {
+                            String sql2 = ("insert into mechanic (username, hourly_rate)" 
+                                    + "values("
+                                    + "'" + tfusername.getText() + "',"
+                                    + "'" + tfhourlyrate.getText() + "')");
+                            sqlhelper.updateTable(sql2);
+                        } catch(SQLException e) {
+                            System.err.println(e.getMessage());
+                        }
+                    }
+                    clearAllFields();
+                }
             } catch(SQLException e) {
                 System.err.println(e.getMessage());
             }
-            
-            // if user == "mechanic"
-            if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")) {
-                try {
-                    String sql = ("insert into mechanic (username, hourly_rate)" 
-                            + "values("
-                            + "'" + tfusername.getText() + "',"
-                            + "'" + tfhourlyrate.getText() + "')");
-                    sqlhelper.updateTable(sql);
-                } catch(SQLException e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-            clearAllFields();
         }
         
         if (!flag) {
             JOptionPane.showMessageDialog(this, "Please fill in all the boxes", "Error", JOptionPane.ERROR_MESSAGE);
+        } else if (exists) {
+            JOptionPane.showMessageDialog(this, "Username already exists", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "New user created");
         }
