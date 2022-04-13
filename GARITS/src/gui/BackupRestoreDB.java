@@ -28,7 +28,7 @@ public class BackupRestoreDB extends javax.swing.JFrame {
      * Creates new form BackupRestoreDB
      * @param 
      */
-    public BackupRestoreDB(User user) {
+    public BackupRestoreDB(User user) throws SQLException{
         this.user = user;
         
         initComponents();

@@ -28,7 +28,7 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new login page
      */
-    public Login() {
+    public Login() throws SQLException{
         initComponents();
         setVisible(true);
         conn = new DBConnect();

@@ -5,8 +5,11 @@
 package gui;
 
 import java.awt.CardLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
+import java.sql.*;
+
+import dbcon.DBConnect;
+import dbcon.SQLHelper;
 import user_accounts.User;
 
 /**
@@ -14,7 +17,18 @@ import user_accounts.User;
  * @author hnaro
  */
 public class MainMenu extends javax.swing.JFrame {
-    
+
+    DBConnect conn = new DBConnect();
+    Connection con;
+
+    {
+        try {
+            con =  conn.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     DefaultListModel listmodel = new DefaultListModel();
     User user;
     
@@ -34,18 +48,28 @@ public class MainMenu extends javax.swing.JFrame {
             btjobsmenu.setEnabled(false);
             btcustomermenu.setEnabled(false);
         }
-        populate(user);
+        populateAdmin(user);
     }
     
     /**
      * populate MainMenu form
      * @param user
      */
-    private void populate(User user) {
+    private void populateAdmin(User user) {
         this.lbluserid.setText(user.getUsername());
         
         // making the menu list to single selection
         jListItem.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+
+    private void populateParts(User user){
+        this.lbluserid.setText(user.getUsername());
+        jListadmin.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        partsListModel.clear();
+        partsListModel.addElement("View Orders");
+        partsListModel.addElement("Create Order");
+        jListadmin.setModel(partsListModel);
+        partsPanel.add(jListadmin);
     }
 
     /**
@@ -75,11 +99,13 @@ public class MainMenu extends javax.swing.JFrame {
         mainPanel.setBackground(new java.awt.Color(204, 204, 204));
         mainPanel.setPreferredSize(new java.awt.Dimension(0, 370));
 
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jListItem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,6 +113,7 @@ public class MainMenu extends javax.swing.JFrame {
                 .addComponent(jListItem, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
+
 
         btpartsmenu.setText("Parts Menu");
         btpartsmenu.addActionListener(new java.awt.event.ActionListener() {
@@ -175,6 +202,7 @@ public class MainMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btpartsmenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btpartsmenuActionPerformed
+
         listmodel.clear();
         if  (listmodel.size() == 0) {
             // parts menu options
@@ -221,6 +249,7 @@ public class MainMenu extends javax.swing.JFrame {
             dispose();
             new CreateCustomer(user);
         }
+
     }//GEN-LAST:event_btviewActionPerformed
 
     private void btlogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlogoutActionPerformed
@@ -238,7 +267,10 @@ public class MainMenu extends javax.swing.JFrame {
             jListItem.setModel(listmodel);
         }  
     }//GEN-LAST:event_btadminmenuActionPerformed
- 
+
+
+    private DefaultListModel<String> partsListModel = new DefaultListModel<>();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btadminmenu;
     private javax.swing.JButton btcustomermenu;

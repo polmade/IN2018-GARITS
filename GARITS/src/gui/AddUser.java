@@ -25,7 +25,7 @@ public class AddUser extends javax.swing.JFrame {
      * Creates new AddUser form/page.
      * @param user
      */
-    public AddUser(User user) {
+    public AddUser(User user) throws SQLException {
         this.user = user;
         initComponents();
         setTitle("Add User | GARITS");
