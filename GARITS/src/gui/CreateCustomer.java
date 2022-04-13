@@ -25,7 +25,7 @@ public class CreateCustomer extends javax.swing.JFrame {
     /**
      * Creates new form CreateCustomer
      */
-    public CreateCustomer(User user) {
+    public CreateCustomer(User user) throws SQLException{
         this.user = user;
         
         initComponents();
