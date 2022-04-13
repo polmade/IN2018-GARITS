@@ -220,7 +220,9 @@ public class MainMenu extends javax.swing.JFrame{
         listmodel.clear();
         if  (listmodel.size() == 0) {
             // jobs menu options
-            listmodel.addElement("");
+            listmodel.addElement("Create Job");
+            listmodel.addElement("Allocate Job");
+            listmodel.addElement("View Job");
             jListItem.setModel(listmodel);
         }                   
     }//GEN-LAST:event_btjobsmenuActionPerformed
@@ -274,6 +276,21 @@ public class MainMenu extends javax.swing.JFrame{
                 case "Edit/Delete Vehicle" -> {
                     dispose();
                     new EditDeleteVehicle(user);
+                }
+                
+                case "Create Job" -> {
+                    dispose();
+                    new CreateJob(user);
+                }
+                
+                case "Allocate Job" -> {
+                    dispose();
+                    new AllocateJob(user);
+                }
+                
+                case "View Job" -> {
+                    dispose();
+                    new ViewJob(user);
                 }
 
                 case "View Orders" -> {
