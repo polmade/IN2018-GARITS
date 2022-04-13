@@ -23,16 +23,22 @@
               <text value="&lt;&lt; Go Back"/>
             </properties>
           </component>
-          <component id="d12df" class="javax.swing.JButton" binding="button2" default-binding="true">
+          <component id="d12df" class="javax.swing.JButton" binding="addNewPartButton" default-binding="true">
             <constraints/>
             <properties>
-              <text value="Button"/>
+              <text value="Add New Part"/>
             </properties>
           </component>
           <component id="77534" class="javax.swing.JButton" binding="editPartButton" default-binding="true">
             <constraints/>
             <properties>
               <text value="Edit Part"/>
+            </properties>
+          </component>
+          <component id="593b0" class="javax.swing.JButton" binding="refetchButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <text value="Refetch"/>
             </properties>
           </component>
         </children>

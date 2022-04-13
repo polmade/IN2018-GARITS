@@ -13,12 +13,14 @@ import java.util.List;
 
 public class viewSpareParts {
     private JButton goBackButton;
-    private JButton button2;
+    private JButton addNewPartButton;
     private JButton editPartButton;
     public JPanel sparePanel;
     private JList list1;
-    InvParts parts;
-    List<String[]> mapping = new ArrayList<String[]>();
+    private JButton refetchButton;
+    private InvParts parts;
+    private List<String[]> mapping = new ArrayList<String[]>();
+    private JFrame frame;
 
     public viewSpareParts(Connection con, JFrame prevFrame, JFrame thisFrame){
 
@@ -46,6 +48,41 @@ public class viewSpareParts {
                 super.mouseClicked(e);
                 prevFrame.setVisible(true);
                 thisFrame.dispose();
+            }
+        });
+        editPartButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+
+                thisFrame.setVisible(false);
+                frame = new JFrame(mapping.get(list1.getSelectedIndex())[0]);
+                frame.setContentPane(new editPart(con, thisFrame, frame,Integer.valueOf(mapping.get(list1.getSelectedIndex())[7]), mapping.get(list1.getSelectedIndex())[0], Integer.valueOf(mapping.get(list1.getSelectedIndex())[6])).editPartPanel);
+                /* "hgmj"/*list1.getSelectedValue().toString()/*.substring(0/* list1.getSelectedValue().toString().indexOf(' '))*/
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.pack();
+                frame.setVisible(true);
+                System.out.println(list1.getSelectedValue().toString());
+            }
+        });
+        addNewPartButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                thisFrame.setVisible(false);
+                frame = new JFrame("Add Part");
+                frame.setContentPane(new addParts(con, thisFrame, frame).addPartPanel);
+                /* "hgmj"/*list1.getSelectedValue().toString()/*.substring(0/* list1.getSelectedValue().toString().indexOf(' '))*/
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.pack();
+                frame.setVisible(true);
+                //System.out.println(list1.getSelectedValue().toString());
+            }
+        });
+        refetchButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
             }
         });
     }
