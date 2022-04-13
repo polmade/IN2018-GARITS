@@ -58,7 +58,7 @@ public class Customer {
      *
      * @param phone
      */
-    public void setPhone(String telephone){
+    public void setTelephone(String telephone){
         this.telephone = telephone;
     }
     
