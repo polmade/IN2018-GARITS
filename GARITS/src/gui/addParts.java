@@ -7,6 +7,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * add part to the database
+ * @author dylantuckey
+ */
 public class addParts {
     private JButton goBackButton;
     private JTextField textField1;
@@ -45,7 +49,7 @@ public class addParts {
         });
 
     }
-
+    //submit changes made to the db
     private void submitChangeDB() throws SQLException {
         String sqlAddPart = "INSERT INTO SpareParts VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement addPart = conn.prepareStatement(sqlAddPart);

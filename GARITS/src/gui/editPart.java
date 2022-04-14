@@ -7,6 +7,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * edit parts in the database
+ * @author dylantuckey
+ */
+
 public class editPart {
     public JPanel editPartPanel;
     private JLabel valLabel;
@@ -47,6 +52,7 @@ public class editPart {
 
     }
 
+    //submit changes made to the database
     private void submitChangeDB(){
         String sqlPartEdit = "UPDATE SpareParts SET stock_level = ?, min_threshold = ? WHERE part_code = ?";
         try {

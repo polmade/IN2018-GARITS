@@ -21,6 +21,7 @@ public class reports {
             e.printStackTrace();
         }
         ArrayList<String> reports = new ArrayList();
+        //insert all relevant sql for report generation into the mapping ArrayList
         reports.add("SELECT part_name, part_code, manufacturer, vehicle_type, year, price, stock_level,\n" +
                 "COUNT(Parts_Sale.SparePartspart_code) AS used,\n" +
                 "COUNT(Purchase_Order.SparePartspart_code) AS delivery FROM SpareParts, Parts_Sale,\n" +
@@ -32,6 +33,7 @@ public class reports {
         for(String a: reports){
             try {
                 ResultSet rs = help.getQuery(a);
+                //check if the resultset returned is null, if null print here else open a filewriter to write results to the relevant text file
                 if(rs == null){
                     System.out.println("here");
                 }

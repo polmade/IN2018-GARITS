@@ -142,6 +142,7 @@ public class BackupRestoreDB extends javax.swing.JFrame {
         String filePath = "/Volumes/DTuckey/GARITS-NEW/GARITS/data/backupDB.sql";
         String command = "zsh";
         String command2 = "mysqldump GARITS > "+filePath;
+        //open a new child process to open a szh shell, then run command to generate a mysqldump
         try {
             //System.out.println("Here");
             Process child = Runtime.getRuntime().exec(command);
@@ -162,8 +163,9 @@ public class BackupRestoreDB extends javax.swing.JFrame {
         chooser.showOpenDialog(null);
         File file = chooser.getSelectedFile();
         String filename = file.getAbsolutePath();
-        String command = "mysql GARITS2 < " + filename;
+        String command = "mysql GARITS < " + filename;
 
+        //open a child process to open a zsh shell and import the selected file into the database
         try {
             //System.out.println("Here");
             Process child = Runtime.getRuntime().exec("zsh");

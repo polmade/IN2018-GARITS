@@ -14,15 +14,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
+ * Unfinished class for implementation of the jobs utility of the system
  * @author hnaro
+ * @author dylantuckey
  */
 public class CreateJob extends javax.swing.JFrame {
     User user;
     DBConnect dbcon = new DBConnect();
     SQLHelper sqlHelper;
     ResultSet rs;
-
+    //create a new SQLHelper with a new connection
     {
         try {
             sqlHelper = new SQLHelper(dbcon.open());

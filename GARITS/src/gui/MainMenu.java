@@ -11,8 +11,9 @@ import user_accounts.User;
 import inventory.reports;
 
 /**
- *
+ * This form serves as the main menu window of the system, and is used for all access within the system.
  * @author hnaro
+ * @author dylantuckey
  */
 public class MainMenu extends javax.swing.JFrame{
 
@@ -205,6 +206,7 @@ public class MainMenu extends javax.swing.JFrame{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //The following methods populate the JList based upon the selected button, ensuring that the user is able to access the correct utilities within the system
     private void btpartsmenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btpartsmenuActionPerformed
 
         listmodel.clear();
@@ -245,6 +247,7 @@ public class MainMenu extends javax.swing.JFrame{
     private void btviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btviewActionPerformed
         String selectedItem = jListItem.getSelectedValue();
         //System.out.println(selectedItem);
+        //Switch statement to allow for generation of new windows, using two different systems to open windows - based on CardLayout and the IntelliJ windowlayoutmanager
         try{
             switch(selectedItem){
                 case "Add User" -> {

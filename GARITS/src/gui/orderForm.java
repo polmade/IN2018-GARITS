@@ -14,7 +14,10 @@ import inventory.*;
 import java.math.*;
 import java.util.Random;
 
-
+/**
+ * form to create supplier orders
+ * @author dylantuckey
+ */
 
 public class orderForm {
     public JPanel formView;

@@ -1,9 +1,7 @@
 package inventory;
 
-//TODO fill out with attributes
-//TODO generate relevant sql
 
-//|THIS SHOULD BE FILLED WITH INFO DURING SELECTION FROM THE GUI
+
 
 import dbcon.DBConnect;
 import dbcon.SQLHelper;
@@ -17,12 +15,14 @@ import java.util.List;
 
 /**
  * intended to be the class to hold details about a new part for the db
+ * @author dylantuckey
  */
 public class InvParts {
     private List<String[]> partsList = new ArrayList<>();
     SQLHelper sqlHelper = new SQLHelper();
     ResultSet partsRes;
 
+    //get spareparts from the database
     public InvParts(Connection con) throws SQLException {
         int count = 0;
         String[] tmpList = new String[8];
