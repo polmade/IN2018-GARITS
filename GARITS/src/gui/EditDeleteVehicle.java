@@ -90,7 +90,7 @@ public class EditDeleteVehicle extends javax.swing.JFrame {
                     vehicle.setModel(rs.getString("model"));
                     vehicle.setEngSerial(rs.getString("engine_serial"));
                     vehicle.setChassisNo(rs.getString("vin"));
-                    vehicle.setColour(rs.getString("colour"));
+                    vehicle.setColour(rs.getString("color"));
                 }
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
@@ -354,7 +354,7 @@ public class EditDeleteVehicle extends javax.swing.JFrame {
                             + "model='" + tfmodel.getText() + "', "
                             + "engine_serial='" + tfengineno.getText() + "', "
                             + "vin='" + tfchassisno.getText() + "', "
-                            + "colour='" + tfcolour.getText() + "' "
+                            + "color='" + tfcolour.getText() + "' "
                             + "WHERE reg_no='" + vehicle.getRegistrationNo() + "';");
                 sqlhelper.updateTable(sql);
             } catch (SQLException e) {

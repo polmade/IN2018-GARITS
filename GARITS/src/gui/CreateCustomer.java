@@ -9,7 +9,12 @@ import dbcon.SQLHelper;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 import java.sql.SQLException;
+import java.util.Random;
 import javax.swing.JOptionPane;
 import user_accounts.User;
 
@@ -22,7 +27,8 @@ public class CreateCustomer extends javax.swing.JFrame {
     private User user;
     DBConnect conn;
     SQLHelper sqlhelper;
-    
+    Connection con;
+
     /**
      * Creates new form CreateCustomer
      */
@@ -293,7 +299,9 @@ public class CreateCustomer extends javax.swing.JFrame {
         if (validateFields() == true) {
             int accHolder = (boolean) cbaccountholder.isSelected() ? 1 : 0;
             // add customer to database
+            Random rand = new Random();
             try {
+
                 String sql = ("INSERT INTO Customer (fname, lname, address, postcode, "
                             + "telephone, email, accountHolder) "
                             + "VALUES ('" + tffirstname.getText() + "', "
@@ -301,6 +309,7 @@ public class CreateCustomer extends javax.swing.JFrame {
                             + "'" + tfaddress.getText() + "', "
                             + "'" + tfpostcode.getText() + "', "
                             + "'" + tfphoneno.getText() + "', "
+
                             + "'" + tfemail.getText() + "', "
                             + "'" + accHolder + "')");
                 PreparedStatement ps = sqlhelper.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -309,6 +318,7 @@ public class CreateCustomer extends javax.swing.JFrame {
                 if(rs.next()) {
                     lastID = rs.getString(1);
                 }
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
