@@ -1,5 +1,7 @@
 package gui;
 
+import dbcon.DBConnect;
+import dbcon.SQLHelper;
 import inventory.InvParts;
 
 import javax.swing.*;
@@ -83,6 +85,15 @@ public class viewSpareParts {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                SQLHelper sqlHelp = new SQLHelper(con);
+                try {
+                    ResultSet rs = sqlHelp.getQuery("SELECT * FROM SpareParts");
+                    listModel.clear();
+                    updateListModel(listModel, rs);
+                    thisFrame.repaint();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
     }

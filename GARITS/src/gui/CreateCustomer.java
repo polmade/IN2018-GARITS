@@ -6,7 +6,11 @@ package gui;
 
 import dbcon.DBConnect;
 import dbcon.SQLHelper;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Random;
 import javax.swing.JOptionPane;
 import user_accounts.User;
 
@@ -19,7 +23,8 @@ public class CreateCustomer extends javax.swing.JFrame {
     private User user;
     DBConnect conn;
     SQLHelper sqlhelper;
-    
+    Connection con;
+
     /**
      * Creates new form CreateCustomer
      */
@@ -240,16 +245,30 @@ public class CreateCustomer extends javax.swing.JFrame {
     private void btaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btaddActionPerformed
         if (validateFields() == true) {
             // add customer to database
+            Random rand = new Random();
             try {
-                String sql = ("INSERT INTO Customer (fname, lname, address, postcode, "
-                            + "telephone, email) "
-                            + "VALUES ('" + tffirstname.getText() + "', "
+                String sqlAddCust = "INSERT INTO Customer VALUES (?,?,?,?,?,?,?);";
+                String sql = ("INSERT INTO Customer "
+                            + "VALUES ('" + rand.nextInt() + "', '" + tffirstname.getText() + "', "
                             + "'" + tflastname.getText() + "', "
                             + "'" + tfaddress.getText() + "', "
                             + "'" + tfpostcode.getText() + "', "
                             + "'" + tfphoneno.getText() + "', "
-                            + "'" + tfemail.getText() + "')");
+                            + "'" + tfemail.getText() + "' , NULL)");
+                //System.out.println(sql);
                 sqlhelper.updateTable(sql);
+                /*
+                con = conn.open();
+                PreparedStatement addCust = con.prepareStatement(sqlAddCust);
+                addCust.setInt(1, 4);
+                addCust.setString(2, tffirstname.getText());
+                addCust.setString(3,tflastname.getText());
+                addCust.setString(4,tfaddress.getText());
+                addCust.setString(5,tfpostcode.getText());
+                addCust.setInt(6, tfphoneno.getText());
+                addCust.setString(7, tfemail.getText());
+                //addCust.setInt(8, NULL);
+                int i = addCust.executeUpdate();*/
             } catch (SQLException e) {
                 e.printStackTrace();
             }

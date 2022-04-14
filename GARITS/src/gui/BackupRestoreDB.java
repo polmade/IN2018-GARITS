@@ -139,7 +139,7 @@ public class BackupRestoreDB extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        String filePath = "/Volumes//GARITS-NEW/GARITS/data/backupDB.sql";
+        String filePath = "/Volumes/DTuckey/GARITS-NEW/GARITS/data/backupDB.sql";
         String command = "zsh";
         String command2 = "mysqldump GARITS > "+filePath;
         try {

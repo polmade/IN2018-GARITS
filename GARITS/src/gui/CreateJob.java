@@ -4,16 +4,32 @@
  */
 package gui;
 
+import dbcon.DBConnect;
+import dbcon.SQLHelper;
 import user_accounts.User;
+
+import java.awt.event.ActionEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
  * @author hnaro
  */
 public class CreateJob extends javax.swing.JFrame {
-    
     User user;
-    
+    DBConnect dbcon = new DBConnect();
+    SQLHelper sqlHelper;
+    ResultSet rs;
+
+    {
+        try {
+            sqlHelper = new SQLHelper(dbcon.open());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Creates new form CreateJob
      */
@@ -22,6 +38,14 @@ public class CreateJob extends javax.swing.JFrame {
         initComponents();
         setTitle("Create Job | GARITS");
         setVisible(true);
+
+        {
+            try {
+                rs = sqlHelper.getQuery("SELECT * FROM Vehicles");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -51,6 +75,12 @@ public class CreateJob extends javax.swing.JFrame {
         btback.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btbackActionPerformed(evt);
+            }
+        });
+        btcreatejob.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btcreatejobActionPerformed(e);
             }
         });
 
@@ -135,6 +165,10 @@ public class CreateJob extends javax.swing.JFrame {
         dispose();
         new MainMenu(user);
     }//GEN-LAST:event_btbackActionPerformed
+
+    private void btcreatejobActionPerformed(java.awt.event.ActionEvent evt){
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btback;

@@ -333,7 +333,7 @@ public class AddVehicle extends javax.swing.JFrame {
             } else {
                 try {
                     String sql = ("INSERT INTO Vehicle (reg_no, make, model, engine_serial, "
-                                + "vin, colour, Customerid) "
+                                + "vin, color, Customerid) "
                                 + "VALUES ('" + tfregno.getText() + "', "
                                 + "'" + tfmake.getText() + "', "
                                 + "'" + tfmodel.getText() + "', "
