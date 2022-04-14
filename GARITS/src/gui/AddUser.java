@@ -192,6 +192,11 @@ public class AddUser extends javax.swing.JFrame {
     private void cbroleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbroleActionPerformed
         if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")) {
             tfhourlyrate.setEnabled(true);
+            tfhourlyrate.setText("105");
+        }
+        else if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Foreperson")) {
+            tfhourlyrate.setEnabled(true);
+            tfhourlyrate.setText("125");
         } else {
             tfhourlyrate.setEnabled(false);
             tfhourlyrate.setText("");
@@ -228,13 +233,13 @@ public class AddUser extends javax.swing.JFrame {
                             + "'" + tfpassword.getText() + "')");
                     sqlhelper.updateTable(sql);
                     
-                    // if user == "mechanic"
-                    if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")) {
+                    // if user == "mechanic" OR "Foreperson"
+                    if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")
+                            || cbrole.getSelectedItem().toString().equals("Foreperson")) {
                         try {
-                            String sql2 = ("insert into mechanic (username, hourly_rate)" 
-                                    + "values("
-                                    + "'" + tfusername.getText() + "',"
-                                    + "'" + tfhourlyrate.getText() + "')");
+                            String sql2 = ("UPDATE user "
+                                + "SET hourly_rate='"+tfhourlyrate.getText()+"'"
+                                + "WHERE username='"+tfusername.getText()+"';");
                             sqlhelper.updateTable(sql2);
                         } catch(SQLException e) {
                             System.err.println(e.getMessage());

@@ -14,6 +14,7 @@ public class User {
     private String role;
     private String username;
     private String password;
+    private double hourlyRate;
     
     public User() {
     }
@@ -55,5 +56,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public double getHourlyRate() {
+        return hourlyRate;
+    }
+    
+     public void setHourlyRate(double hourlyRate) {
+        this.hourlyRate = hourlyRate;
     }
 }

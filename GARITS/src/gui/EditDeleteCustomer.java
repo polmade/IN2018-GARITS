@@ -4,6 +4,7 @@
  */
 package gui;
 
+import customer_account.AccountHolder;
 import customer_account.Customer;
 import dbcon.DBConnect;
 import dbcon.SQLHelper;
@@ -26,6 +27,8 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
     DBConnect conn;
     DefaultListModel customersListModel = new DefaultListModel();
     Customer customer = new Customer();
+    AccountHolder accountHolder = new AccountHolder();
+    boolean accHolder = false;
     
     /**
      * Creates new form EditDeleteCustomer
@@ -43,6 +46,7 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
             sqlhelper = new SQLHelper(conn.open());
         }
         
+        jPanelAccHolder.setVisible(false);
         UpdateList();
     }
     
@@ -82,6 +86,7 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
             // get selected user
             try {
                 ResultSet rs = sqlhelper.getQuery("Select * from Customer where id='"+splitStr.get(0)+"'");
+                
                 while (rs.next()) {
                     customer.setID(rs.getString("id"));
                     customer.setFname(rs.getString("fname"));
@@ -90,6 +95,16 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
                     customer.setPostcode(rs.getString("postcode"));
                     customer.setTelephone(rs.getString("telephone"));
                     customer.setEmail(rs.getString("email"));
+                    if (rs.getBoolean("accountHolder") == true) {
+                        accHolder = true;
+                        ResultSet rsc = sqlhelper.getQuery("Select * from Customer_Account where CustomerID='"+splitStr.get(0)+"'");                 
+                        while (rsc.next()) {
+                            accountHolder.setPayLater(rsc.getBoolean("payLater"));
+                            accountHolder.setDiscountType(rsc.getString("discountType"));
+                        }
+                    } else {
+                        accHolder = false;
+                    }
                 }
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
@@ -135,6 +150,9 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
         tfpostcode.setText(null);
         tftelephone.setText(null);
         tfemail.setText(null);
+        cbaccountholder.setSelected(false);
+        cbpaylater.setSelected(false);
+        cbdiscount.setSelectedIndex(-1);
     }
     
 
@@ -170,10 +188,16 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
         btdelete = new javax.swing.JButton();
         btedit = new javax.swing.JButton();
         btconfirm = new javax.swing.JButton();
+        cbaccountholder = new javax.swing.JCheckBox();
+        jPanelAccHolder = new javax.swing.JPanel();
+        cbpaylater = new javax.swing.JCheckBox();
+        jLabel1 = new javax.swing.JLabel();
+        cbdiscount = new javax.swing.JComboBox<>();
 
         jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         btback.setText("Back");
         btback.addActionListener(new java.awt.event.ActionListener() {
@@ -232,6 +256,45 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
             }
         });
 
+        cbaccountholder.setText("Account Holder");
+        cbaccountholder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbaccountholderActionPerformed(evt);
+            }
+        });
+
+        cbpaylater.setText("Pay Later");
+
+        jLabel1.setText("Discount Plan: ");
+
+        cbdiscount.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fixed", "Variable", "Flexible" }));
+        cbdiscount.setSelectedIndex(-1);
+
+        javax.swing.GroupLayout jPanelAccHolderLayout = new javax.swing.GroupLayout(jPanelAccHolder);
+        jPanelAccHolder.setLayout(jPanelAccHolderLayout);
+        jPanelAccHolderLayout.setHorizontalGroup(
+            jPanelAccHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelAccHolderLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelAccHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cbpaylater)
+                    .addGroup(jPanelAccHolderLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbdiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanelAccHolderLayout.setVerticalGroup(
+            jPanelAccHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelAccHolderLayout.createSequentialGroup()
+                .addComponent(cbpaylater)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelAccHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(cbdiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -256,23 +319,27 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
                             .addComponent(btconfirm)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(93, 93, 93)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblid)
-                            .addComponent(lblfname)
-                            .addComponent(lbllname)
-                            .addComponent(lbladdress)
-                            .addComponent(lblpostcode)
-                            .addComponent(lbltelephone)
-                            .addComponent(lblemail))
-                        .addGap(55, 55, 55)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfid, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tffname, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tflname, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfaddress, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfpostcode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tftelephone, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfemail, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblid)
+                                    .addComponent(lblfname)
+                                    .addComponent(lbllname)
+                                    .addComponent(lbladdress)
+                                    .addComponent(lblpostcode)
+                                    .addComponent(lbltelephone)
+                                    .addComponent(lblemail))
+                                .addGap(55, 55, 55)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tfid, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tffname, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tflname, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfaddress, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfpostcode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tftelephone, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfemail, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(cbaccountholder)
+                            .addComponent(jPanelAccHolder, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -325,9 +392,13 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfemail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblemail))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cbaccountholder)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanelAccHolder, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btconfirm)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
@@ -358,6 +429,15 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
                     sqlhelper.updateTable(sql);
                 } catch (SQLException e) {
                     System.err.println(e.getMessage());
+                }
+                // if account holder, delete from Customer_Account
+                if (accHolder) {
+                    try {
+                        String sql = ("DELETE FROM Customer_Account WHERE CustomerID='"+id+"';");
+                        sqlhelper.updateTable(sql);
+                    } catch (SQLException e) {
+                        System.err.println(e.getMessage());
+                    }
                 }
                 // delete customer details
                 try {
@@ -392,6 +472,15 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
             tfemail.setText(customer.getEmail());
             jListCustomers.clearSelection();
         }
+        if (accHolder) {
+            cbaccountholder.setSelected(true);
+            jPanelAccHolder.setVisible(true);
+            cbpaylater.setSelected(accountHolder.getPayLater());
+            cbdiscount.setSelectedItem(accountHolder.getDiscountType());
+        } else {
+            cbaccountholder.setSelected(false);
+            jPanelAccHolder.setVisible(false);
+        }
     }//GEN-LAST:event_bteditActionPerformed
 
     private void btconfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btconfirmActionPerformed
@@ -399,6 +488,8 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Cannot update customer", "Error", JOptionPane.ERROR_MESSAGE);
         } 
         else if (validateFields() == true) {
+            int holder = (boolean) cbaccountholder.isSelected() ? 1 : 0;
+            int paylater = (boolean) cbpaylater.isSelected() ? 1 : 0;
             try {
                 String sql = ("UPDATE Customer "
                         + "SET fname='" + tffname.getText() + "',"
@@ -406,25 +497,76 @@ public class EditDeleteCustomer extends javax.swing.JFrame {
                         + "address='" + tfaddress.getText() + "',"
                         + "postcode='" + tfpostcode.getText() + "',"
                         + "telephone='" + tftelephone.getText() + "',"
-                        + "email='" + tfemail.getText() + "' "
+                        + "email='" + tfemail.getText() + "', "
+                        + "accountHolder='" + holder + "' "
                         + "WHERE id='" + tfid.getText() + "';");
                 sqlhelper.updateTable(sql);
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
             }
+            
+            if (accHolder) {
+                // remove customer as account holder
+                if (!cbaccountholder.isSelected()) {
+                    try {
+                        String sql = ("DELETE FROM Customer_Account WHERE CustomerID='"+tfid.getText()+"';");
+                        sqlhelper.updateTable(sql);
+                    } catch (SQLException e) {
+                        System.err.println(e.getMessage());
+                    }
+                // update account holder details
+                } else {
+                    try {
+                        String sql = ("UPDATE Customer_Account "
+                                + "SET payLater='" + paylater + "',"
+                                + "discountType='" + cbdiscount.getSelectedItem() + "' "
+                                + "WHERE CustomerID='" + tfid.getText() + "';");
+                        sqlhelper.updateTable(sql);
+                    } catch (SQLException e) {
+                        System.err.println(e.getMessage());
+                    }
+                }
+            } else {
+                // make customer account holder
+                if (cbaccountholder.isSelected()) {
+                    try {
+                        String sql = ("INSERT INTO Customer_Account (CustomerID, payLater, discountType )"
+                                + "VALUES ('" + tfid.getText() + "', "
+                                + "'" + paylater + "', "
+                                + "'" + cbdiscount.getSelectedItem() + "')");
+                        sqlhelper.updateTable(sql);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
             clearAllFields();
             JOptionPane.showMessageDialog(this, "Customer updated");
+            jPanelAccHolder.setVisible(false);
             UpdateList();
         }
     }//GEN-LAST:event_btconfirmActionPerformed
+
+    private void cbaccountholderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbaccountholderActionPerformed
+        if(cbaccountholder.isSelected()) {
+            jPanelAccHolder.setVisible(true);
+        } else {
+            jPanelAccHolder.setVisible(false);
+        }
+    }//GEN-LAST:event_cbaccountholderActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btback;
     private javax.swing.JButton btconfirm;
     private javax.swing.JButton btdelete;
     private javax.swing.JButton btedit;
+    private javax.swing.JCheckBox cbaccountholder;
+    private javax.swing.JComboBox<String> cbdiscount;
+    private javax.swing.JCheckBox cbpaylater;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JList<String> jListCustomers;
+    private javax.swing.JPanel jPanelAccHolder;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbladdress;
     private javax.swing.JLabel lblemail;

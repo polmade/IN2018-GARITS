@@ -6,6 +6,9 @@ package gui;
 
 import dbcon.DBConnect;
 import dbcon.SQLHelper;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import user_accounts.User;
@@ -36,6 +39,8 @@ public class CreateCustomer extends javax.swing.JFrame {
         } else {
             sqlhelper = new SQLHelper(conn.open());
         }
+        
+        jPanelAccHolder.setVisible(false);
     }
     
     /**
@@ -75,6 +80,9 @@ public class CreateCustomer extends javax.swing.JFrame {
         tfpostcode.setText(null);
         tfphoneno.setText(null);
         tfemail.setText(null);
+        cbaccountholder.setSelected(false);
+        cbpaylater.setSelected(false);
+        cbdiscount.setSelectedIndex(-1);
     }
 
     /**
@@ -86,7 +94,6 @@ public class CreateCustomer extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
         btback = new javax.swing.JButton();
         lbltitle = new javax.swing.JLabel();
         lblname = new javax.swing.JLabel();
@@ -102,8 +109,14 @@ public class CreateCustomer extends javax.swing.JFrame {
         btadd = new javax.swing.JButton();
         lbllastname = new javax.swing.JLabel();
         tflastname = new javax.swing.JTextField();
+        cbaccountholder = new javax.swing.JCheckBox();
+        jPanelAccHolder = new javax.swing.JPanel();
+        cbpaylater = new javax.swing.JCheckBox();
+        jLabel1 = new javax.swing.JLabel();
+        cbdiscount = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         btback.setText("Back");
         btback.addActionListener(new java.awt.event.ActionListener() {
@@ -140,88 +153,126 @@ public class CreateCustomer extends javax.swing.JFrame {
 
         lbllastname.setText("Last Name: ");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btback)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbltitle)
-                        .addGap(35, 35, 35))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(78, 78, 78)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbladdress)
-                            .addComponent(lbllastname)
-                            .addComponent(lblname)
-                            .addComponent(lblpostcode)
-                            .addComponent(lblphoneno)
-                            .addComponent(lblemail))
-                        .addGap(18, 30, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(tffirstname, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                            .addComponent(tfaddress, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(tfpostcode, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(tfphoneno, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(tfemail, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(tflastname, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btadd, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 69, Short.MAX_VALUE))
-        );
+        cbaccountholder.setText("Account Holder");
+        cbaccountholder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbaccountholderActionPerformed(evt);
+            }
+        });
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {tfaddress, tfemail, tffirstname, tfphoneno, tfpostcode});
+        cbpaylater.setText("Pay Later");
 
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(btback)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jLabel1.setText("Discount Plan: ");
+
+        cbdiscount.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fixed", "Variable", "Flexible" }));
+        cbdiscount.setSelectedIndex(-1);
+
+        javax.swing.GroupLayout jPanelAccHolderLayout = new javax.swing.GroupLayout(jPanelAccHolder);
+        jPanelAccHolder.setLayout(jPanelAccHolderLayout);
+        jPanelAccHolderLayout.setHorizontalGroup(
+            jPanelAccHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelAccHolderLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lbltitle)
+                .addGroup(jPanelAccHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cbpaylater)
+                    .addGroup(jPanelAccHolderLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbdiscount, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
+        jPanelAccHolderLayout.setVerticalGroup(
+            jPanelAccHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelAccHolderLayout.createSequentialGroup()
+                .addComponent(cbpaylater)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblname)
-                    .addComponent(tffirstname))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tflastname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbllastname))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tfaddress)
-                    .addComponent(lbladdress))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblpostcode)
-                    .addComponent(tfpostcode))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblphoneno)
-                    .addComponent(tfphoneno))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblemail)
-                    .addComponent(tfemail))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btadd)
-                .addGap(55, 55, 55))
+                .addGroup(jPanelAccHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(cbdiscount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(btback)
+                .addGap(50, 50, 50)
+                .addComponent(lbltitle)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(74, 74, 74)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(cbaccountholder)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btadd, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanelAccHolder, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblemail)
+                                    .addComponent(lbladdress)
+                                    .addComponent(lbllastname)
+                                    .addComponent(lblname)
+                                    .addComponent(lblphoneno)
+                                    .addComponent(lblpostcode))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(tffirstname, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                                    .addComponent(tfaddress, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(tfpostcode, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(tfphoneno, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(tfemail, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(tflastname, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(75, 75, 75))))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {tfaddress, tfemail, tffirstname, tfphoneno, tfpostcode});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btback)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lbltitle)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tffirstname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblname))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tflastname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbllastname))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfaddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbladdress))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfpostcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblpostcode))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfphoneno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblphoneno))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfemail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblemail))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cbaccountholder)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanelAccHolder, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btadd)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -238,23 +289,46 @@ public class CreateCustomer extends javax.swing.JFrame {
     }//GEN-LAST:event_btbackActionPerformed
 
     private void btaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btaddActionPerformed
+        String lastID = "";
         if (validateFields() == true) {
+            int accHolder = (boolean) cbaccountholder.isSelected() ? 1 : 0;
             // add customer to database
             try {
                 String sql = ("INSERT INTO Customer (fname, lname, address, postcode, "
-                            + "telephone, email) "
+                            + "telephone, email, accountHolder) "
                             + "VALUES ('" + tffirstname.getText() + "', "
                             + "'" + tflastname.getText() + "', "
                             + "'" + tfaddress.getText() + "', "
                             + "'" + tfpostcode.getText() + "', "
                             + "'" + tfphoneno.getText() + "', "
-                            + "'" + tfemail.getText() + "')");
-                sqlhelper.updateTable(sql);
+                            + "'" + tfemail.getText() + "', "
+                            + "'" + accHolder + "')");
+                PreparedStatement ps = sqlhelper.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                ps.executeUpdate();
+                ResultSet rs = ps.getGeneratedKeys();
+                if(rs.next()) {
+                    lastID = rs.getString(1);
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            
+            int paylater = (boolean) cbpaylater.isSelected() ? 1 : 0;
+            // if account holder
+            if (cbaccountholder.isSelected()) {
+                try {
+                    String sql = ("INSERT INTO Customer_Account (CustomerID, payLater, discountType )"
+                            + "VALUES ('" + lastID + "', "
+                            + "'" + paylater + "', "
+                            + "'" + cbdiscount.getSelectedItem() + "')");
+                    sqlhelper.updateTable(sql);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
             JOptionPane.showMessageDialog(this, "New customer created");
             clearAllFields();
+            jPanelAccHolder.setVisible(false);
         }
     }//GEN-LAST:event_btaddActionPerformed
 
@@ -265,11 +339,23 @@ public class CreateCustomer extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_tfphonenoKeyTyped
+
+    private void cbaccountholderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbaccountholderActionPerformed
+        if(cbaccountholder.isSelected()) {
+             jPanelAccHolder.setVisible(true);
+        } else {
+            jPanelAccHolder.setVisible(false);
+        }
+    }//GEN-LAST:event_cbaccountholderActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btadd;
     private javax.swing.JButton btback;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JCheckBox cbaccountholder;
+    private javax.swing.JComboBox<String> cbdiscount;
+    private javax.swing.JCheckBox cbpaylater;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanelAccHolder;
     private javax.swing.JLabel lbladdress;
     private javax.swing.JLabel lblemail;
     private javax.swing.JLabel lbllastname;

@@ -290,7 +290,7 @@ public class MainMenu extends javax.swing.JFrame{
                     new AllocateJob(user);
                 }
                 
-                case "View Job" -> {
+                case "View Jobs" -> {
                     dispose();
                     new ViewJob(user);
                 }
