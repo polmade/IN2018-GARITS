@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.sql.*;
 import dbcon.DBConnect;
 import user_accounts.User;
+import inventory.reports;
 
 /**
  *
@@ -260,6 +261,10 @@ public class MainMenu extends javax.swing.JFrame{
                     new BackupRestoreDB(user);
                 }
 
+                case "Generate Reports" -> {
+                    reports newRep = new reports(conn);
+                }
+
                 case "Add Customer" -> {
                     dispose();
                     new CreateCustomer(user);
@@ -354,6 +359,7 @@ public class MainMenu extends javax.swing.JFrame{
             listmodel.addElement("Add User");
             listmodel.addElement("Edit/Delete User");
             listmodel.addElement("Backup/Restore Database");
+            listmodel.addElement("Generate Reports");
             jListItem.setModel(listmodel);
         }  
     }//GEN-LAST:event_btadminmenuActionPerformed

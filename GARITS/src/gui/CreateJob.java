@@ -8,6 +8,7 @@ import dbcon.DBConnect;
 import dbcon.SQLHelper;
 import user_accounts.User;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,12 +42,20 @@ public class CreateJob extends javax.swing.JFrame {
 
         {
             try {
-                rs = sqlHelper.getQuery("SELECT * FROM Vehicles");
+                rs = sqlHelper.getQuery("SELECT * FROM Vehicle");
+                DefaultListModel lm = new DefaultListModel<>();
+                while(rs.next()){
+                    lm.addElement(rs.next());
+                }
+                jListVehicles.setModel(lm);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+
     }
+
+
 
     /**
      * This method is called from within the constructor to initialize the form.
