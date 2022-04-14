@@ -8,9 +8,10 @@ import dbcon.DBConnect;
 import dbcon.SQLHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import user_accounts.Mechanic;
 import user_accounts.User;
 
 /**
@@ -23,7 +24,6 @@ public class EditDeleteUser extends javax.swing.JFrame {
     DBConnect conn;
     User user;
     User selectedUser = new User();
-    Mechanic mechanic;
     DefaultListModel usersListModel;
     
     /*
@@ -62,7 +62,8 @@ public class EditDeleteUser extends javax.swing.JFrame {
             usersListModel.clear();
             while (rs.next()) {
                 String username = rs.getString("username");
-                usersListModel.addElement(username);
+                String role = rs.getString("role");
+                usersListModel.addElement(username+", "+role);
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -79,26 +80,16 @@ public class EditDeleteUser extends javax.swing.JFrame {
         if(jListusers.getSelectedValue() == null) {
             JOptionPane.showMessageDialog(this, "Please select a user", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
+            List<String> splitStr = Arrays.asList(jListusers.getSelectedValue().split(","));
             // get selected user
             try {
-                ResultSet rs = sqlhelper.getQuery("Select * from user where username='"+jListusers.getSelectedValue()+"'");
+                ResultSet rs = sqlhelper.getQuery("Select * from user where username='"+splitStr.get(0)+"'");
                 while (rs.next()) {
                     selectedUser.setName(rs.getString("name"));
                     selectedUser.setRole(rs.getString("role"));
                     selectedUser.setUsername(rs.getString("username"));
                     selectedUser.setPassword(rs.getString("password"));
-                }
-                // if the user is mechanic
-                if (selectedUser.getRole().equals("Mechanic")) {
-                    mechanic = new Mechanic(selectedUser);
-                    try {
-                        ResultSet rs1 = sqlhelper.getQuery("Select * from mechanic where username='"+selectedUser.getUsername()+"'");
-                        while (rs1.next()) {
-                            mechanic.setHourlyRate(rs1.getDouble("hourly_rate"));
-                        }    
-                    } catch (SQLException e) {
-                        System.err.println(e.getMessage());
-                    }
+                    selectedUser.setHourlyRate(rs.getDouble("hourly_rate"));
                 }
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
@@ -372,52 +363,28 @@ public class EditDeleteUser extends javax.swing.JFrame {
                     System.err.println(e.getMessage());
                 }
 
-                // if user == "mechanic"
-                if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")) {
+                // if user == "mechanic" OR "Foreperson"
+                if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")
+                        || cbrole.getSelectedItem().toString().equals("Foreperson")) {
                     try {
-                        String sql = ("UPDATE mechanic "
-                                + "SET username='" + tfusername.getText() + "',"
-                                + "hourly_rate='"+tfhourlyrate.getText()+"'"
+                        String sql = ("UPDATE user "
+                                + "SET hourly_rate='"+tfhourlyrate.getText()+"'"
                                 + "WHERE username='"+selectedUser.getUsername()+"';");
                         sqlhelper.updateTable(sql);
                     } catch(SQLException e) {
                         System.err.println(e.getMessage());
                     }
                 }
-                // if selected user was not mechanic, but updating to mechanic
-                if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")
-                        && !selectedUser.getRole().equals("Mechanic")) {
+                // if selectedUser == "mechanic" OR "Foreperson", UPDATED to other role
+                if(cbrole.getSelectedItem() != null && selectedUser.getRole().equals("Mechanic")
+                        || cbrole.getSelectedItem().toString().equals("Foreperson")) {
                     try {
-                        String sql = ("insert into mechanic (username, hourly_rate)" 
-                                + "values("
-                                + "'" + tfusername.getText() + "',"
-                                + "'" + tfhourlyrate.getText() + "')");
+                        String sql = ("UPDATE user "
+                            + "SET hourly_rate=NULL "
+                            + "WHERE username='"+tfusername.getText()+"';");
                         sqlhelper.updateTable(sql);
                     } catch(SQLException e) {
                         System.err.println(e.getMessage());
-                    }
-                }
-                // if selected user was mechanic, but updating to any other role
-                if(cbrole.getSelectedItem() != null && selectedUser.getRole().equals("Mechanic")) {
-                    // if not updating user role
-                    if (cbrole.getSelectedItem().equals("Mechanic")) {
-                        try {
-                            String sql = ("UPDATE mechanic "
-                                + "SET hourly_rate='"+tfhourlyrate.getText()+"'"
-                                + "WHERE username='"+tfusername.getText()+"';");
-                            sqlhelper.updateTable(sql);
-                        } catch(SQLException e) {
-                            System.err.println(e.getMessage());
-                        }
-                    }
-                    // if updating user role
-                    if (!cbrole.getSelectedItem().equals("Mechanic")) {
-                        try {
-                            String sql = ("DELETE FROM mechanic WHERE username='"+selectedUser.getUsername()+"';");
-                            sqlhelper.updateTable(sql);
-                        } catch(SQLException e) {
-                            System.err.println(e.getMessage());
-                        }
                     }
                 }
                 clearAllFields();
@@ -441,10 +408,9 @@ public class EditDeleteUser extends javax.swing.JFrame {
             cbrole.setSelectedItem(selectedUser.getRole());
             tfusername.setText(selectedUser.getUsername());
             tfpassword.setText(selectedUser.getPassword());
-            if(!selectedUser.getRole().equals("Mechanic")) {
-                tfhourlyrate.setEnabled(false);
-            } else {
-                tfhourlyrate.setText(Double.toString(mechanic.getHourlyRate()));
+            if(selectedUser.getRole().equals("Mechanic") || selectedUser.getRole().equals("Foreperson")) {
+                tfhourlyrate.setEnabled(true);
+                tfhourlyrate.setText(Double.toString(selectedUser.getHourlyRate()));
             }
             jListusers.clearSelection();
         }
@@ -459,16 +425,7 @@ public class EditDeleteUser extends javax.swing.JFrame {
             // remove user from jlist and db
             int confirm = JOptionPane.showConfirmDialog(null, "Are you Sure you want to delete the user?", "Delete User", JOptionPane.YES_NO_OPTION);
             if(confirm == JOptionPane.YES_OPTION) {
-                // first delete from mechanic
-                if (selectedUser.getRole().equals("Mechanic")) {
-                    try {
-                        String sql = ("DELETE FROM mechanic WHERE username='"+username+"';");
-                        sqlhelper.updateTable(sql);
-                    } catch (SQLException e) {
-                        System.err.println(e.getMessage());
-                    }
-                }
-                // second delete from user
+                // delete from user
                 try {
                     String sql = ("DELETE FROM user WHERE username='"+username+"';");
                     sqlhelper.updateTable(sql);
@@ -497,6 +454,11 @@ public class EditDeleteUser extends javax.swing.JFrame {
     private void cbroleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbroleActionPerformed
         if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Mechanic")) {
             tfhourlyrate.setEnabled(true);
+            tfhourlyrate.setText("105");
+        }
+        else if(cbrole.getSelectedItem() != null && cbrole.getSelectedItem().toString().equals("Foreperson")) {
+            tfhourlyrate.setEnabled(true);
+            tfhourlyrate.setText("125");
         } else {
             tfhourlyrate.setEnabled(false);
             tfhourlyrate.setText("");

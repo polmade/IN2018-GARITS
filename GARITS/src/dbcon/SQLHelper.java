@@ -41,7 +41,10 @@ public class SQLHelper {
         PreparedStatement ps = connect.prepareStatement(sql);
         ps.executeUpdate();
     }
-
+    
+    public Connection getConnection() {
+        return connect;
+    }
 
 
 }
