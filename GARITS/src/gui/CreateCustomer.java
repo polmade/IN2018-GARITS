@@ -309,7 +309,6 @@ public class CreateCustomer extends javax.swing.JFrame {
                             + "'" + tfaddress.getText() + "', "
                             + "'" + tfpostcode.getText() + "', "
                             + "'" + tfphoneno.getText() + "', "
-
                             + "'" + tfemail.getText() + "', "
                             + "'" + accHolder + "')");
                 PreparedStatement ps = sqlhelper.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -327,10 +326,10 @@ public class CreateCustomer extends javax.swing.JFrame {
             // if account holder
             if (cbaccountholder.isSelected()) {
                 try {
-                    String sql = ("INSERT INTO Customer_Account (CustomerID, payLater, discountType )"
+                    String sql = ("INSERT INTO Customer_Account (account_id, discountType, payLater )"
                             + "VALUES ('" + lastID + "', "
-                            + "'" + paylater + "', "
-                            + "'" + cbdiscount.getSelectedItem() + "')");
+                            + "'" + cbdiscount.getSelectedItem() + "', "
+                            + "'" + paylater + "')");
                     sqlhelper.updateTable(sql);
                 } catch (SQLException e) {
                     e.printStackTrace();

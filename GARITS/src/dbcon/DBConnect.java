@@ -2,6 +2,8 @@ package dbcon;
 
 import java.sql.*;
 
+import static java.sql.Connection.TRANSACTION_SERIALIZABLE;
+
 /**
  * The main instance for the GARITS project to open a connection to the rdbms
  * @since 1
@@ -40,6 +42,7 @@ public class DBConnect {
          */
         try{
             conDB = DriverManager.getConnection(DB, User, PWord);
+            conDB.setTransactionIsolation(TRANSACTION_SERIALIZABLE);
             System.out.println("connected");
         } catch(SQLException e){
             e.printStackTrace();
